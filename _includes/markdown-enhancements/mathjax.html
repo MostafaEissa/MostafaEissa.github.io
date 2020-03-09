@@ -6,12 +6,23 @@
 {%- assign _mathjax_autoNumber = __return -%}
 
 <script type="text/x-mathjax-config">
-	var _config = { tex2jax: {
-		inlineMath: [['$','$'], ['\\(','\\)']]
-	}};
+	var _config = { 
+	showProcessingMessages: false,
+    messageStyle: 'none',
+	tex2jax: {
+		inlineMath: [['$','$'], ['\\(','\\)']],
+		displayMath: [['$$','$$']],
+		processEnvironments: false
+	},
+	'HTML-CSS': {
+      imageFont: null
+    }};
 	{%- if _mathjax_autoNumber == true -%}
-		_config.TeX = { equationNumbers: { autoNumber: "all" } };
+		_config.TeX = { equationNumbers: { autoNumber: "AMS" } };
 	{%- endif -%}
 	MathJax.Hub.Config(_config);
 </script>
 <script type="text/javascript" src="{{ _sources.mathjax }}" async></script>
+ <script>
+  {%- include scripts/mathjaxPreview.js -%}
+</script>
