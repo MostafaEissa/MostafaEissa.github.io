@@ -12,7 +12,7 @@ The Naïve Bayes classifier is a popular machine learning algorithm. In this pos
 
 The Naïve Bayes classifier is a machine algorithm that can be used for classification tasks, similar to the [perceptron algorithm](https://mostafaeissa.github.io/2020/02/26/the-perceptron.html). It is a probabilistic machine learning method which means it relies on probability theory to calculate the probability of a specific class given the input features. 
 
-For example, consider an input instance $X=(x_1,x_2,…,x_n)$ and output labels $Y \in \{+1,-1\} $, the Naïve Bayes classifier calculates $P(Y=+1│x_1,x_2,…,x_n)$ and $P(Y=-1│x_1,x_2,…,x_n)$ and then picks the class that has a higher probability. To calculate these probabilities, the algorithm relies on Bayes rule which allows the probability defined above to be rewritten. Let $C_k \in \{ +1,-1 \}$ then:
+For example, consider an input instance $X=(x_1,x_2,…,x_n)$ and output labels $Y \in$ {$+1,-1$} , the Naïve Bayes classifier calculates $P(Y=+1│x_1,x_2,…,x_n)$ and $P(Y=-1│x_1,x_2,…,x_n)$ and then picks the class that has a higher probability. To calculate these probabilities, the algorithm relies on Bayes rule which allows the probability defined above to be rewritten. Let $C_k \in$ {$+1,-1$} then:
 
 $$
 P(Y=C_k│x_1,x_2,…,x_n ) = \frac{P(x_1,x_2,…,x_n│Y=C_k) P(Y=C_k)}{P(x_1,x_2,…,x_n)}
