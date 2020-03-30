@@ -51,6 +51,10 @@ m_2 &= \frac{1}{2} [(1,0)+(1,1)]=(1,0.5)
 \end{aligned}
 $$
 
+we can visualize the centroids ater the first iteration.
+
+![k-means example](/assets/images/k-means-clustering/example-iteration2.PNG)
+
 **Iteration 2:**
 
 *Assignment step:*
@@ -66,4 +70,103 @@ And no new change in assignment will be done and the algorithm terminates.
 
 ## Python Implementation
 
+We can easily implement the above two steps in a couple of lines of python.
 
+```python
+def kMeans(X, k):
+    m = np.random.permutation(X)[:k]
+    changes = True
+    clusters = np.zeros(X.shape[0])
+    while changes:
+        changes = False
+        for i in range(len(X)):
+            idx = np.argmin(dist(X[i,:], m))
+            if idx != clusters[i]:
+                changes = True
+            clusters[i] = idx
+        
+        for j in range(len(m)):
+            m[j,:] = np.sum(X[clusters == j,:],axis=0)/np.sum(clusters == j)   
+            
+    return m, clusters
+```
+And here is the definition of function ```dist```
+
+```python
+def dist(x, y):
+    return np.sqrt(np.sum((x - y) ** 2, axis=1))
+```
+
+## Picking K
+
+At this point you might be asking the questions how to pick the correct number of clusters because the choice of k can generate completely different result. A good technique is to use the [elbow method](https://en.wikipedia.org/wiki/Elbow_method_(clustering)) .
+
+The elbow method is one of the most popular methods to determine the optimal number of clusters. We plot for different value of K on the x-axis, the distortion on the y-axis. The distortion is defined as the sum of squared distance between the data point and the centroid.
+Distortion  = $\sum x_i-m_c$. At certain value of K we will notice shift in the graph trend which determines the optimal value of K.
+
+Let’s start by some arbitrary dataset consisting of three clusters as shown in the next figure, of course in real life we do not know in advance the actual number of clusters but we will use this example to see how the elbow method will do relative to what we know to be true.
+
+```python
+from sklearn.datasets import make_blobs
+x, y = make_blobs(n_samples=20, centers=3, n_features=2)
+plt.plot()
+plt.title('Dataset')
+plt.scatter(x[:,0], x[:,1])
+plt.show()
+```
+
+![k-means example](/assets/images/k-means-clustering/three-clusters.PNG)
+
+The next step is to apply k-means clustering algorithm for a range of value, calculate the distortion and plot it as a function of K. In this example we will try the k values in the range 1 to 10.
+
+```python
+distortions = []
+K = range(1,10)
+for k in K:
+    m, c = kMeans(x, k)
+    distortion = 0
+    for i in range(len(x)):
+            distortion = distortion + np.min(dist(x[i,:], m))
+    distortions.append(distortion/ x.shape[0])
+```
+
+We can then plot the distortions as a function of k. we then notice the elbow shape the curve makes at K=3 indicating the optimal value for the number of clusters.
+
+```python
+plt.plot(K, distortions, '*-')
+plt.xlabel('k')
+plt.ylabel('Distortion')
+plt.title('The Elbow Method')
+plt.show()
+```
+
+![k-means example](/assets/images/k-means-clustering/elbow-method.PNG)
+
+## Shortcomings
+
+Because we are using the Euclidean distance when measuring the distance to the centroids, K-means algorithm prefer clusters that have circular shapes even when a better cluster shape is more appropriate. For example, let’s look at dataset of two interleaving circles ([make_moons in sklearn](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_moons.html)).
+
+
+```python
+from sklearn.datasets import make_moons
+x, y = make_moons(n_samples=20)
+plt.plot()
+plt.title('Two interleaving half-circles')
+plt.scatter(x[:,0], x[:,1],c=y)
+plt.show()
+```
+
+![k-means example](/assets/images/k-means-clustering/make_moons.PNG)
+
+However, if we try to apply K-means algorithm using two clustering we will get two different clusters. Although it is a valid clustering it might not be the best way to divide the dataset to make inferences about the dataset.
+
+![k-means example](/assets/images/k-means-clustering/make_moons_clusterd.PNG)
+
+## Conclusion
+
+In this post, we looked at the K-means clustering algorithm. We then looked at the algorithm steps and visualized some examples. We also discussed how to determine the optimal number of clusters and when the algorithm might not produce the best results. 
+
+
+Hope you enjoyed this post.
+<br/>
+M.
