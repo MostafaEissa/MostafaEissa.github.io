@@ -23,7 +23,7 @@ The algorithm keeps iterating until no more changes happen in data point assignm
 
 ### Worked Example
 
-Suppose we are given the following dataset in R2 and we want to cluster the data into k=2 clusters.
+Suppose we are given the following dataset in $R_2$ and we want to cluster the data into k=2 clusters.
 
 ![k-means example](/assets/images/k-means-clustering/example-iteration1.PNG)
 
@@ -101,8 +101,8 @@ def dist(x, y):
 
 At this point you might be asking the questions how to pick the correct number of clusters because the choice of k can generate completely different result. A good technique is to use the [elbow method](https://en.wikipedia.org/wiki/Elbow_method_(clustering)) .
 
-The elbow method is one of the most popular methods to determine the optimal number of clusters. We plot for different value of K on the x-axis, the distortion on the y-axis. The distortion is defined as the sum of squared distance between the data point and the centroid.
-Distortion  = $\sum x_i-m_c$. At certain value of K we will notice shift in the graph trend which determines the optimal value of K.
+The elbow method is one of the most popular methods to determine the optimal number of clusters. We plot for different value of K on the x-axis, the distortion on the y-axis. We define distortion as the sum of  distance between the data point and the centroid.
+Distortion  = $\sum \lvert \lvert x_i-m_c \rvert \rvert $. At certain value of K we will notice shift in the graph trend which determines the optimal value of K.
 
 Let’s start by some arbitrary dataset consisting of three clusters as shown in the next figure, of course in real life we do not know in advance the actual number of clusters but we will use this example to see how the elbow method will do relative to what we know to be true.
 
