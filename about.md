@@ -13,11 +13,11 @@ key: page-about
 
 ## Who Am I?
 
-Hello there! I'm Mostafa, currently an MS student.
+Hello there! 
 
-My  research insterest are machine learning and optimization. I'm especially interested in theoretical machine learning.
+I'm Mostafa, currently a masters students in Data Science with deep interest in machine learning, distributed systems and optimization
 
-I graduated from Cairo University  University in 2012 with a Bachelor's in computer engineering. From 2012-2019, I was working in various data science positions mainly business analysis and data engineering.
+I graduated from Cairo University  University in 2012 with a Bachelor's in computer engineering. From 2012-2019, I was working in various data science positions mainly business analysis and data engineering where I worked on all aspects of data analytics, from wrangling and visualisation, to statisitcal analysis, predicitve modelling and machine learning.
 
 ## Where Can You Find Me?
 
