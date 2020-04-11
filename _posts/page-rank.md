@@ -26,4 +26,26 @@ where $In(p)$ is the set of in-links to page $p$.
 
 We can think of the problem as a surfer who follows the links randomly from a given page. However, the problem with this definition is that some pages do not have any out-links (a sink page) which can make our algorithm get stuck and that is why we need a better model.
 
+### The Random Surfer Model
+
+Similar to how most people surf the web, on a given web page you choose to follow one of the links on the links on the page. If you reach a page without any links (a sink page) then you simply randomly restart on a new page on the web Furthermore, every once in a while, you get bored of following the link and you decide to jump to a totally new page.
+
+In mathematical notation, let $c$ be the probability that the surfer will continue following the links while $(1-c)$ is the probability that the surfer will get bored and jump to a random page. A good value for $c = 0.85.$ This time PageRank score is a combination of the contribution of PageRank scores of the in-links and the contribution of randomly landing on this page when the surfer is bored.
+
+$$
+\begin{equation}
+\label{page rank}
+PR(p) = c \times \sum \limits_{q \in In(p)} \frac{PR(q)}{L(q)} + (1-c) \times \frac{1}{N}
+\end{equation}
+$$
+
+We can think of the PageRank score $PR(p)$ of a page $p$ as the probability that a random surfer will be at page $p$ at a given point in time. In this interpretation, the PageRank score will be between 0 and 1 and since the surfer has to be on some page at any given time and the sum of the PageRank scores of all the pages sums to 1. 
+
+The Algorithm is as follows:
+
+1. Assign each node an initial page rank
+2. repeat until convergence: calculate the page rank of each node using equation  $\eqref{page rank}$
+
+### Worked Example
+
 
