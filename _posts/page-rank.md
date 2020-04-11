@@ -1,6 +1,6 @@
 ---
 layout: article
-title: The Naive Bayes Assumtion
+title: Page Rank Algorithm
 tags: [Machine Learning]
 mathjax: true
 mathjax_autoNumber: true
@@ -47,5 +47,7 @@ The Algorithm is as follows:
 2. repeat until convergence: calculate the page rank of each node using equation  $\eqref{page rank}$
 
 ### Worked Example
+
+Consider [this example](https://www.cs.princeton.edu/~chazelle/courses/BIB/pagerank.htm), where we have four web pages pointing to each other as shown in the figure below. Intuitively, Page C has 3 in-links so it should have the highest PageRank and page D should be last because it does not have any in-links.
 
 
