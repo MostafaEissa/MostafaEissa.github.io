@@ -50,4 +50,57 @@ The Algorithm is as follows:
 
 Consider [this example](https://www.cs.princeton.edu/~chazelle/courses/BIB/pagerank.htm), where we have four web pages pointing to each other as shown in the figure below. Intuitively, Page C has 3 in-links so it should have the highest PageRank and page D should be last because it does not have any in-links.
 
+![page rank example](/assets/images/page-rank./example.PNG) 
 
+We can write the PageRank score of each page as follows:
+
+$$
+\begin{aligned}
+PR(A) &= c \times \frac{PR(C)}{1} +\frac{(1-c)}{4} \\
+PR(B) &= c \times \frac{PR(A)}{3} + \frac{(1-c)}{4} \\
+PR(C) &= c \times \left(\frac{PR(A)}{3} + \frac{PR(B)}{1} + \frac{PR(D)}{1} \right)  + \frac{(1-c)}{4} \\
+PR(D) &= c \times \frac{PR(A)}{3} + \frac{(1-c)}{4} \\
+\end{aligned}
+$$
+
+### Matrix Representation
+
+To make solving the above equations easier we can write them in matrix format.
+
+Notice that the solution consists of two matrices, the first matrix is very similar to the adjacency matrix of the original graph while the second matrix is just a constant matrix. We can then use [Power Iteration method](https://en.wikipedia.org/wiki/Power_iteration) to solve this problem.
+
+### Python Implementation
+
+We can easily implement the iterations of power method in a couple of lines of python.
+
+```python
+import numpy as np
+
+def page_rank(adj_matrix):
+    # parameters
+    num_pages = adj_matrix.shape[0]
+    c = 0.85
+    uniform_prob = 1.0/num_pages
+    epsilon = 1e-5
+    
+    # transition probability
+    transition_matrix = c * adj_matrix  + (1-c) * np.full((num_pages, num_pages), uniform_prob)
+    
+    # initialize page rank
+    pr = np.full((1, num_pages), uniform_prob)
+    
+    pr_new = np.matmul(pr, transition_matrix)
+    while np.sum((pr_new - pr)**2) > epsilon:
+        pr = pr_new
+        pr_new = np.matmul(pr, transition_matrix)
+    
+    return pr
+```
+
+### Conclusion
+
+In this post, we described the PageRank algorithm. We then described the random surfer model and the interpreting PageRank as a probability. Later we described the algorithm steps and discussed how to use power iteration to solve the recursive equations.
+
+Hope you enjoyed this post.
+<br/>
+M.
