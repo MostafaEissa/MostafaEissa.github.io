@@ -65,9 +65,31 @@ $$
 
 ### Matrix Representation
 
-To make solving the above equations easier we can write them in matrix format.
+To make solving the above equations easier we can write them in matrix format. We will not go into all the mathematical details but we can write the equation as the sum of two matrices, the first matrix is very similar to the adjacency matrix of the original graph while the second matrix is just a constant matrix.
 
-Notice that the solution consists of two matrices, the first matrix is very similar to the adjacency matrix of the original graph while the second matrix is just a constant matrix. We can then use [Power Iteration method](https://en.wikipedia.org/wiki/Power_iteration) to solve this problem.
+$$
+\begin{bmatrix}
+PR(A) & PR(B) & PR(C) & PR(D)
+\end{bmatrix}
+=
+\begin{bmatrix}
+PR(A) & PR(B) & PR(C) & PR(D)
+\end{bmatrix}
+\left( c \times + \right)
+
+$$
+
+We can then use [Power Iteration method](https://en.wikipedia.org/wiki/Power_iteration) to solve this problem Let $c = 0.85$ and suppose we initialize 
+
+$$
+\begin{bmatrix}
+PR(A) & PR(B) & PR(C) & PR(D)
+\end{bmatrix}
+=
+\begin{bmatrix}
+1.0 & 0 & 0 & 0
+\end{bmatrix}
+$$
 
 ### Python Implementation
 
