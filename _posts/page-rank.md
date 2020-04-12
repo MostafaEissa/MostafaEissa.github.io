@@ -75,8 +75,21 @@ PR(A) & PR(B) & PR(C) & PR(D)
 \begin{bmatrix}
 PR(A) & PR(B) & PR(C) & PR(D)
 \end{bmatrix}
-\left( c \times + \right)
-
+\left( c \times 
+\begin{bmatrix}
+0 & 0.5 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0
+\end{bmatrix}
++ (1-c) \times 
+\begin{bmatrix}
+1 & 1 & 1 & 1 \\
+1 & 1 & 1 & 1 \\
+1 & 1 & 1 & 1 \\
+1 & 1 & 1 & 1
+\end{bmatrix}
+\right)
 $$
 
 We can then use [Power Iteration method](https://en.wikipedia.org/wiki/Power_iteration) to solve this problem Let $c = 0.85$ and suppose we initialize 
@@ -90,6 +103,15 @@ PR(A) & PR(B) & PR(C) & PR(D)
 1.0 & 0 & 0 & 0
 \end{bmatrix}
 $$
+
+
+ Page  | Iteration 1 | Iteration 2 | Iteration 3 | Iteration 4 |   …   | Iteration 12
+:----: | :---------: | :---------: | :---------: | :---------: | :---: | :----------:
+Page A |     1.0     |   0.0375    |  0.4306250  | 0.41707812  |       |  0.36124157
+Page B |     0.0     |   0.4625    |  0.0853125  | 0.25239062  |       |  0.22300072
+Page C |     0.0     |   0.4625    |  0.4465625  | 0.29303125  |       |  0.37825770
+Page D |     0.0     |   0.0375    |  0.0375000  | 0.03750000  |       |  0.03750000
+
 
 ### Python Implementation
 
