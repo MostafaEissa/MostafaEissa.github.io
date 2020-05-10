@@ -34,6 +34,15 @@ board = np.array([
     ])
 ```
 
+We also need an additional function that will pick and empty cell and put a value of 2 or 4 into it.
+
+```python
+def fill_random_cell(board):
+
+```
+
+### Merging of Tiles 
+
 We need a couple of helper functions that can help us maage the game state. 
 
 First, we need a function to move the tiles in a certain direction by applying the rules specified below. 
@@ -47,7 +56,7 @@ def shift_left(board):
                 if board[i][j - 1] is None:
                     board[i][j - 1] = board[i][j]
                     board[i][j] = None
-                
+
 def merge_tiles(board):
     width, height = board.shape
     for i in range(height):
@@ -55,7 +64,11 @@ def merge_tiles(board):
             if board[i][j - 1] == board[i][j] and board[i][j] is not None:
                 board[i][j - 1] *= 2
                 board[i][j] = None
+ ```
 
+we can use the above functions to generalize board movement in all directions.         
+
+```python
 def move(board, direction):
     new_board = board.copy()
     directions = {
@@ -74,6 +87,8 @@ def move(board, direction):
     return new_board
 ```
 
+### End of Game
+
 Second, we need a function to determine if we reached the end of a game i.e. if a player has won if a tile has the value ```1024``` or lost if there are no more available moves left.
 
 ```python
@@ -81,8 +96,19 @@ def is_game_won(board):
     return (board == 1024).any()
 
 def is_game_lost(board):
-    pass
+    # check all move direction
+    # if no new board can be generated
+    # then the game is lost
+    if (move(board, 'left') == board).all() \
+    and (move(board, 'right') == board).all() \
+    and (move(board, 'up') == board).all() \
+    and (move(board, 'down') == board).all() :
+        return True
+    
+    return False
 ```
+
+### Main Game Loop
 
 Hope you enjoyed this post.
 <br/>
