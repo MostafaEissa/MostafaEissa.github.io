@@ -38,7 +38,10 @@ We also need an additional function that will pick and empty cell and put a valu
 
 ```python
 def fill_random_cell(board):
-
+    empty_slots = [(i,j) for i in range(board.shape[0]) for j in range(board.shape[1]) if board[i,j] == None]
+    idx = np.random.randint(len(empty_slots))
+    value = np.random.choice([2,4])
+    board[empty_slots[idx]] = value
 ```
 
 ### Merging of Tiles 
@@ -108,7 +111,22 @@ def is_game_lost(board):
     return False
 ```
 
-### Main Game Loop
+###  Game Loop
+
+What is left is some function to draw the board to the screen and correctly handle user input. Drawing can be done by a simple two nested for loops but we must be careful because cells can be blank or contain values up to 1024 so we need to make sure they all get maximum possible width needed.
+
+```python
+def draw(board):
+    width, height = board.shape
+    for i in range(height):
+        for j in range(width):
+            value = '    ' if board[i,j] is None else str(board[i,j]).center(4)
+            print(value,  end='|')
+        print()
+        print('----|----|----|----')
+```
+
+
 
 Hope you enjoyed this post.
 <br/>
