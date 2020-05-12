@@ -26,12 +26,14 @@ In order to implement the game we need to understand its rules. The game has onl
 We can represent the game as a 2D array which each cell position is either empty or contains a value that is a multiple of 2.
 
 ```python
-board = np.array([
-    [None,None,None,None],
-    [None,None,None,None],
-    [None,None,None,None],
-    [None,None,None,None]
-    ])
+def create_board():
+    board = np.array([
+        [None,None,None,None],
+        [None,None,None,None],
+        [None,None,None,None],
+        [None,None,None,None]
+        ])
+    return board
 ```
 
 We also need an additional function that will pick and empty cell and put a value of 2 or 4 into it.
@@ -42,6 +44,19 @@ def fill_random_cell(board):
     idx = np.random.randint(len(empty_slots))
     value = np.random.choice([2,4])
     board[empty_slots[idx]] = value
+```
+
+As such, in order to initialize the board we simply create an empty board and fill a random position on it.
+
+```python
+def new_game():
+    # create a random empty board
+    board = create_board()
+
+    # fill an empty position with 2 or 4
+    fill_random_cell(board)
+
+    return board
 ```
 
 ### Merging of Tiles 
@@ -126,7 +141,55 @@ def draw(board):
         print('----|----|----|----')
 ```
 
+We will also need to read and parse user input.  To make things simply we will assume users will not enter wrong input so that we do not have to handle input validation.
 
+```python
+def get_user_input():
+    inp = input()
+    if inp == 'w':
+        return 'up'
+    elif inp == 's':
+        return 'down'
+    elif inp == 'a':
+        return 'left'
+    elif inp == 'd':
+        return 'right'
+```
+
+At this point, we need a loop to read the user input, apply the provided movement (left, right, up, down) and check the game state for game end.
+
+
+
+```python
+def game_loop():
+    # create a new game 
+    board = new_game()
+
+    while True:
+        # draw board on screen
+        draw(board)
+
+        # get user input 
+        dir = get_user_input()
+
+        # update game board
+        board = move(board, dir)
+        fill_random_cell(board)
+        
+        # check game state
+        is_won, is_lost = is_game_won(board), is_game_lost(board)
+
+        if is_won:
+            print('You Won!')
+            break
+        elif is_lost:
+            print('You Lost!)
+            break
+        else:
+            continue
+```
+
+Here is how it all looks
 
 Hope you enjoyed this post.
 <br/>
