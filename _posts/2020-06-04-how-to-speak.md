@@ -70,13 +70,10 @@ between you and the slides.
 - someone who tells you that you can do it- - someone shows you a problem in a new way.
 - someone who exhibits passion for what they are doing.
 
-### How to teach people how to think?
 
-- provide people with stories they need to know
-- how to analyze the stories and what questions to ask.
+### Getting famous 
 
-
-### Getting famous (work gets remembered)
+In order for your presentation and your work to become memorable you need to answe the following questions:
 
 - why: getting famous can help you get better funding
 - your ideas are like your children and you do not want them to go into the world in rags you want to present them so that they are valued.
@@ -88,7 +85,7 @@ between you and the slides.
     5. Story tell the story how you did it, how it works and why is it important
 
 
-## How to finish a presentation
+### How to finish a presentation
 
 ##### Final slide
 
