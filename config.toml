@@ -13,7 +13,7 @@ pygmentsCodefences = true
 pygmentsUseClasses = true
 pygmentsCodefencesGuessSyntax = true
 
-paginate = 5
+paginate = 10
 
 [author]
   name = "Mostafa Abdelrahman"
