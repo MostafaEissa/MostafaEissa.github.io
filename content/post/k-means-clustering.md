@@ -1,6 +1,6 @@
 ---
 title: "K-means clustering"
-date: 2020-03-31
+date: 2021-10-18
 categories: [Machine Learning]
 mathjax: true
 mathjaxEnableSingleDollar: true
@@ -27,7 +27,9 @@ The algorithm keeps iterating until no more changes happen in data point assignm
 
 Suppose we are given the following dataset in $R_2$ and we want to cluster the data into k=2 clusters.
 
+{{% center %}}
 ![k-means example iteration 1](/images/k-means-clustering/example-iteration1.png)
+{{% /center %}}
 
 The first step is to pick 2 random initial locations for the cluster centroids. Let $m_1 = (0, 0.5)$ and $m_2 = (0.5, 0.5)$.
 
@@ -55,7 +57,9 @@ $$
 
 we can visualize the centroids ater the first iteration.
 
+{{% center %}}
 ![k-means example iteration 2](/images/k-means-clustering/example-iteration2.png)
+{{% /center %}}
 
 **Iteration 2:**
 
@@ -116,8 +120,9 @@ plt.title('Dataset')
 plt.scatter(x[:,0], x[:,1])
 plt.show()
 ```
-
+{{% center %}}
 ![three clusters example](/images/k-means-clustering/three-clusters.png)
+{{% /center %}}
 
 The next step is to apply k-means clustering algorithm for a range of value, calculate the distortion and plot it as a function of K. In this example we will try the k values in the range 1 to 10.
 
@@ -142,7 +147,9 @@ plt.title('The Elbow Method')
 plt.show()
 ```
 
+{{% center %}}
 ![elbow method](/images/k-means-clustering/elbow-method.png)
+{{% /center %}}
 
 ### Shortcomings
 
@@ -157,14 +164,36 @@ plt.title('Two interleaving half-circles')
 plt.scatter(x[:,0], x[:,1],c=y)
 plt.show()
 ```
-
+{{% center %}}
 ![make moons example](/images/k-means-clustering/make_moons.png)
+{{% /center %}}
 
 However, if we try to apply K-means algorithm using two clustering we will get two different clusters. Although it is a valid clustering it might not be the best way to divide the dataset to make inferences about the dataset.
 
+{{% center %}}
 ![make moons clustered](/images/k-means-clustering/make_moons_clusterd.png)
+{{% /center %}}
+
+### Matrix Factorization Perspective
+
+I learnt about this idea from the fantastic book [Machine Learning Refined book]( https://www.amazon.com/Machine-Learning-Refined-Foundations-Applications/dp/1108480721). The books is filled with many insights about machine learning algorithms from an optimization point of you and I encourage you to check it out. 
+
+In our implementation, there are a set of points $X$ and the aim is to find K cluster centroids $C$ and assign each point $x$ to a particular cluster $c_k$ so that the assigned centroid is as close to the point as possible. i.e., if $e_k$ is all zeros vector except at entry k, then we want:
+
+$$
+C e_k = c_k \approx x_p \quad \text{for all points} \quad x_p \in X
+$$
+
+The trick is we can rewrite this objective in matrix notation as $CW \approx X$, and lo and behold we arrive at the canonical [matrix factorization from](https://developers.google.com/machine-learning/recommendation/collaborative/matrix). In this from, $W$ is the weight matrix with the special constraint that each column contains a single nonzero entry that determines assignment of points to clusters. The next figure shows this framing for our [worked example](#worked-example).
+
+{{% center %}}
+![k-means as matrix factorization](/images/k-means-clustering/mf.png)
+{{% /center %}}
+
+In this framing, K-means can be analyzed as an optimization problem with an objective function to be minimized and we can track and analyze the progress of the algorithm on each iteration.
+
 
 ### Conclusion
 
-In this post, we looked at the K-means clustering algorithm. We then looked at the algorithm steps and visualized some examples. We also discussed how to determine the optimal number of clusters and when the algorithm might not produce the best results. 
+In this post, we looked at the K-means clustering algorithm. We then looked at the algorithm steps and visualized some examples. We also discussed how to determine the optimal number of clusters and when the algorithm might not produce the best results. Finally, we discussed how K-means, a heuristic algorithm, can be viewed from the lens of an optimization framework. 
 
