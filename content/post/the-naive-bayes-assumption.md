@@ -175,7 +175,9 @@ $$
 
 The figure below shows the plot of these two decision boundaries \eqref{optimal final} and \eqref{naive final}. Notice that the two decision boundary are exactly equally at only three points the Naïve Bayes classifier is optimal except only in the two shaded regions that are above one of the curves and below the other where it disagrees with the optimal procedure. As such, the Naïve Bayes classifier is optimal in a far larger region than just wanting the probabilities to be exact which makes it much more successful in practice.
 
+{{% center %}}
 ![Decision Boundaries](/images/the-naive-bayes-assumption/decision-boundaries.png)
+{{% /center %}}
 
 ### Conclusion
 

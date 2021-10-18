@@ -28,8 +28,9 @@ In other words, each input is represented as a vector where each individual comp
 
 For simplicity, let us focus on the 2D plane and limit inputs to only two features $a_1$ and $a_2$. In this setting, each input corresponds to a point in 2D as seen in the next figure. The goal of the perceptron algorithm is to find a line such that all points on one side belong to the positive class and all points on the other side belong to the negative class. 
 
+{{% center %}}
 ![the separating hyperplane](/images/the-perceptron/the-separating-hyperplane.png) 
-
+{{% /center %}}
 
 A plane can be described by a vector $w$ that is normal to the plane. Hence, when we say we want to find a separating plane we mean that we want to find the components of the vector $w$ that describe the plane.
 
@@ -50,7 +51,9 @@ Here, $w.x$ is the dot product which is the sum component wise components of bot
 
 The question now is how can we find such $w$ that classifies the points correctly. A simple idea is to initialize the $w$ vector randomly and go over the points one by one. If the point is correctly classified then we do not need to do anything however, if is misclassified we need to move the hyperplane (update $w$) so that the point will eventually become correctly classified. A good choice, as shown in the next figure, is a vector that is proportional to the misclassified data point but in the opposite direction i.e. $w_{new} =w_{old}+ηyx$. The algorithm keeps iterating until $w$ converges does not change anymore.
 
+{{% center %}}
 ![the perceptron update rule](/images/the-perceptron/the-perceptron-update-rule.png) 
+{{% /center %}}
 
 Each iteration of the algorithm consists of a full pass over all the training examples. The algorithm terminates when in a given iteration no point was misclassified.
 A natural question at this point is how can we update the bias term $b$ as well. The trick is to augment our training data with all ones vector and treat the bias as another weight component (i.e. weight component of a feature whose value is alaways one).
@@ -77,7 +80,9 @@ To Understand the algorithm better, let’s go through a toy example. Suppose we
 |$[1 \enspace 0 \enspace 1]$ | $[1 \enspace 1 \enspace 0]$ 
 |$[1 \enspace 0 \enspace 0]$ | $[1 \enspace 1 \enspace 1]$|
 
+{{% center %}}
 ![3d example](/images/the-perceptron/3d-example.png) 
+{{% /center %}}
 
 ***Iteration 1***
 
@@ -120,7 +125,9 @@ $[0 \enspace {-2} \enspace 0 \enspace 1]$|	$[1 \enspace 1 \enspace 1 \enspace 1]
 
 So, the hyperplane found by the perceptron algorithm can be $[0 \enspace {-2} \enspace 0 \enspace 1]$
 
+{{% center %}}
 ![3d example solved](/images/the-perceptron/3d-example-solved.png) 
+{{% /center %}}
 
 ### Limitations: XOR Example
 
@@ -135,7 +142,9 @@ Input 1	|Input 2|	Output
 
 We can visualize the XOR output in the 2D space as shown below. There is no line that can separate the positive from the negative points which means the data is not linearly separable.
 
+{{% center %}}
 ![XOR in 2D](/images/the-perceptron/XOR.png)
+{{% /center %}}
 
 If we try to follow the same update rule specified earlier we will get stuck in an infinite loop.
 

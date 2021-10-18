@@ -52,7 +52,9 @@ The Algorithm is as follows:
 
 Consider [this example](https://www.cs.princeton.edu/~chazelle/courses/BIB/pagerank.htm), where we have four web pages pointing to each other as shown in the figure below. Intuitively, Page C has 3 in-links so it should have the highest PageRank and page D should be last because it does not have any in-links.
 
+{{% center %}}
 ![page rank example](/images/page-rank/example.png) 
+{{% /center %}}
 
 We can write the PageRank score of each page as follows:
 
