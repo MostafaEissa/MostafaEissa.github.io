@@ -1,0 +1,424 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
+<title>K-means clustering - Beyond Lambda</title>
+<meta name=renderer content="webkit">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta http-equiv=cache-control content="no-transform">
+<meta http-equiv=cache-control content="no-siteapp">
+<meta name=theme-color content="#f8f5ec">
+<meta name=msapplication-navbutton-color content="#f8f5ec">
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec">
+<meta name=author content="Mostafa Abdelrahman"><meta name=description content="K-means is a clustering algorithm that is relatively old yet it still in use today because of its simplicity and power.
+">
+<meta name=generator content="Hugo 0.88.1 with theme even">
+<link rel=canonical href=https://mostafaeissa.github.io/post/k-means-clustering/>
+<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
+<link rel=manifest href=/manifest.json>
+<link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5>
+<link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet>
+<link href=/lib/fancybox/jquery.fancybox-3.1.20.min.css rel=stylesheet>
+<meta property="og:title" content="K-means clustering">
+<meta property="og:description" content="K-means is a clustering algorithm that is relatively old yet it still in use today because of its simplicity and power.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://mostafaeissa.github.io/post/k-means-clustering/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2021-10-18T00:00:00+00:00">
+<meta property="article:modified_time" content="2021-10-18T00:00:00+00:00">
+<meta itemprop=name content="K-means clustering">
+<meta itemprop=description content="K-means is a clustering algorithm that is relatively old yet it still in use today because of its simplicity and power."><meta itemprop=datePublished content="2021-10-18T00:00:00+00:00">
+<meta itemprop=dateModified content="2021-10-18T00:00:00+00:00">
+<meta itemprop=wordCount content="1232">
+<meta itemprop=keywords content><meta name=twitter:card content="summary">
+<meta name=twitter:title content="K-means clustering">
+<meta name=twitter:description content="K-means is a clustering algorithm that is relatively old yet it still in use today because of its simplicity and power."><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]-->
+</head>
+<body>
+<div id=mobile-navbar class=mobile-navbar>
+<div class=mobile-header-logo>
+<a href=/ class=logo>Beyond Lambda</a>
+</div>
+<div class=mobile-navbar-icon>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+<nav id=mobile-menu class="mobile-menu slideout-menu">
+<ul class=mobile-menu-list>
+<a href=/>
+<li class=mobile-menu-item>Home</li>
+</a><a href=/post/>
+<li class=mobile-menu-item>Archives</li>
+</a><a href=/about/>
+<li class=mobile-menu-item>About</li>
+</a>
+</ul>
+</nav>
+<div class=container id=mobile-panel>
+<header id=header class=header>
+<div class=logo-wrapper>
+<a href=/ class=logo>Beyond Lambda</a>
+</div>
+<nav class=site-navbar>
+<ul id=menu class=menu>
+<li class=menu-item>
+<a class=menu-item-link href=/>Home</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/post/>Archives</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/about/>About</a>
+</li>
+</ul>
+</nav>
+</header>
+<main id=main class=main>
+<div class=content-wrapper>
+<div id=content class=content>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title>K-means clustering</h1>
+<div class=post-meta>
+<span class=post-time> 2021-10-18 </span>
+<div class=post-category>
+<a href=/categories/machine-learning/> Machine Learning </a>
+</div>
+<span class=more-meta> 1232 words </span>
+<span class=more-meta> 6 mins read </span>
+</div>
+</header>
+<div class=post-toc id=post-toc>
+<h2 class=post-toc-title>Contents</h2>
+<div class="post-toc-content always-active">
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href=#introduction>Introduction</a></li>
+<li><a href=#worked-example>Worked Example</a></li>
+<li><a href=#python-implementation>Python Implementation</a></li>
+<li><a href=#picking-k>Picking K</a></li>
+<li><a href=#shortcomings>Shortcomings</a></li>
+<li><a href=#matrix-factorization-perspective>Matrix Factorization Perspective</a></li>
+<li><a href=#conclusion>Conclusion</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<div class=post-content>
+<p>K-means is a clustering algorithm that is relatively old yet it still in use today because of its simplicity and power.</p>
+<h3 id=introduction>Introduction</h3>
+<p>Unlike supervised learning algorithm, in unsupervised learning algorithms there is no notion of a label. We are simply given a set of input data and we want to conclude something from it. One idea is clustering. In this post we will focus on K-means algorithm.</p>
+<p>In layman terms, clustering is grouping a collection of unlabeled data into similar sets. The resulting clusters will be vastly affected by how you decide if two points are similar to each other. Perhaps the simplest and most obvious measure of similarity is proximity where close by data points should belong to the same cluster.</p>
+<p>K-means applies this idea in an iterative way, it starts with a random set of k-points $m_1, m_2, …, m_k$ that act as the centroid of the $k$ clusters to be determined (hence the name k-means) and it proceeds in two steps:</p>
+<ul>
+<li>
+<p><em>Assignment step</em>: each point in the data set is assigned to the closest cluster based on the Euclidean distance to the cluster centroid. Mathematically speaking, the point $x$ is assigned to the cluster $C_i$ so that each cluster has a set of points $S_i$ such that $\lvert\lvert {x – m_i} \rvert\rvert \leq \lvert\lvert x – m_j \rvert\rvert \enspace \forall \enspace 1 \leq j \leq k$</p>
+</li>
+<li>
+<p><em>Update step</em>: recalculate the cluster centroid based on the new assigned points $m_i=\frac{1}{\rvert S_i \lvert}\sum \limits_{x_j \in S_i} x_j$</p>
+</li>
+</ul>
+<p>The algorithm keeps iterating until no more changes happen in data point assignment and centroid locations.</p>
+<h3 id=worked-example>Worked Example</h3>
+<p>Suppose we are given the following dataset in $R_2$ and we want to cluster the data into k=2 clusters.</p>
+<div class=align-center>
+<p><img src=/images/k-means-clustering/example-iteration1.png alt="k-means example iteration 1"></p>
+</div>
+<p>The first step is to pick 2 random initial locations for the cluster centroids. Let $m_1 = (0, 0.5)$ and $m_2 = (0.5, 0.5)$.</p>
+<p><strong>Iteration 1:</strong></p>
+<p><em>Assignment step:</em></p>
+<table>
+<thead>
+<tr>
+<th>Distance to Centroid</th>
+<th>$m1 (0, 0.5)$</th>
+<th>$m2 (0.5, 0.5)$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$P1 (0, 0)$</td>
+<td>$\sqrt{(0-0)^2+(0-0.5)^2}=$ <strong>$0.5$</strong></td>
+<td>$\sqrt{(0-0.5)^2+(0-0.5)^2}=0.707$</td>
+</tr>
+<tr>
+<td>$P2 (1,0)$</td>
+<td>$\sqrt{(1-0)^2+(0-0.5)^2}=1.118$</td>
+<td>$\sqrt{(1-0.5)^2+(0-0.5)^2}=$ <strong>$0.707$</strong></td>
+</tr>
+<tr>
+<td>$P3 (0, 1)$</td>
+<td>$\sqrt{(0-0)^2+(1-0.5)^2}=$ <strong>$0.5$</strong></td>
+<td>$\sqrt{(0-0.5)^2+(1-0.5)^2}=0.707$</td>
+</tr>
+<tr>
+<td>$P4 (1,1)$</td>
+<td>$\sqrt{(1-0)^2+(1-0.5)^2}=1.118$</td>
+<td>$\sqrt{(1-0.5)^2+(1-0.5)^2}=$ <strong>$0.707$</strong></td>
+</tr>
+</tbody>
+</table>
+<p>So P1 and P3 will be assigned to centroid $m1 (0, 0.5)$ while P2 and P4 will be assigned to centroid $m2 (0.5,0.5)$</p>
+<p><em>Update step:</em></p>
+<p>$$
+\begin{aligned}
+m_1 &= \frac{1}{2} [(0,0)+(0,1)]=(0,0.5) \newline
+m_2 &= \frac{1}{2} [(1,0)+(1,1)]=(1,0.5)
+\end{aligned}
+$$</p>
+<p>we can visualize the centroids ater the first iteration.</p>
+<div class=align-center>
+<p><img src=/images/k-means-clustering/example-iteration2.png alt="k-means example iteration 2"></p>
+</div>
+<p><strong>Iteration 2:</strong></p>
+<p><em>Assignment step:</em></p>
+<table>
+<thead>
+<tr>
+<th>Distance to Centroid</th>
+<th>$m1 (0, 0.5)$</th>
+<th>$m2 (0.5, 0.5)$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$P1 (0, 0)$</td>
+<td>$\sqrt{(0-0)^2+(0-0.5)^2}=$ <strong>$0.5$</strong></td>
+<td>$\sqrt{(0-1.0)^2+(0-0.5)^2}=1.118$</td>
+</tr>
+<tr>
+<td>$P2 (1,0)$</td>
+<td>$\sqrt{(1-0)^2+(0-0.5)^2}=1.118$</td>
+<td>$\sqrt{(1-1.0)^2+(0-0.5)^2}=$ <strong>$0.5$</strong></td>
+</tr>
+<tr>
+<td>$P3 (0, 1)$</td>
+<td>$\sqrt{(0-0)^2+(1-0.5)^2}=$ <strong>$0.5$</strong></td>
+<td>$\sqrt{(0-1.0)^2+(1-0.5)^2}=1.118$</td>
+</tr>
+<tr>
+<td>$P4 (1,1)$</td>
+<td>$\sqrt{(1-0)^2+(1-0.5)^2}=1.118$</td>
+<td>$\sqrt{(1-1.0)^2+(1-0.5)^2 }=$ <strong>$0.5$</strong></td>
+</tr>
+</tbody>
+</table>
+<p>And no new change in assignment will be done and the algorithm terminates.</p>
+<h3 id=python-implementation>Python Implementation</h3>
+<p>We can easily implement the above two steps in a couple of lines of python.</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=k>def</span> <span class=nf>kMeans</span><span class=p>(</span><span class=n>X</span><span class=p>,</span> <span class=n>k</span><span class=p>):</span>
+    <span class=n>m</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>random</span><span class=o>.</span><span class=n>permutation</span><span class=p>(</span><span class=n>X</span><span class=p>)[:</span><span class=n>k</span><span class=p>]</span>
+    <span class=n>changes</span> <span class=o>=</span> <span class=kc>True</span>
+    <span class=n>clusters</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>zeros</span><span class=p>(</span><span class=n>X</span><span class=o>.</span><span class=n>shape</span><span class=p>[</span><span class=mi>0</span><span class=p>])</span>
+    <span class=k>while</span> <span class=n>changes</span><span class=p>:</span>
+        <span class=n>changes</span> <span class=o>=</span> <span class=kc>False</span>
+        <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=nb>len</span><span class=p>(</span><span class=n>X</span><span class=p>)):</span>
+            <span class=n>idx</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>argmin</span><span class=p>(</span><span class=n>dist</span><span class=p>(</span><span class=n>X</span><span class=p>[</span><span class=n>i</span><span class=p>,:],</span> <span class=n>m</span><span class=p>))</span>
+            <span class=k>if</span> <span class=n>idx</span> <span class=o>!=</span> <span class=n>clusters</span><span class=p>[</span><span class=n>i</span><span class=p>]:</span>
+                <span class=n>changes</span> <span class=o>=</span> <span class=kc>True</span>
+            <span class=n>clusters</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>=</span> <span class=n>idx</span>
+        
+        <span class=k>for</span> <span class=n>j</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=nb>len</span><span class=p>(</span><span class=n>m</span><span class=p>)):</span>
+            <span class=n>m</span><span class=p>[</span><span class=n>j</span><span class=p>,:]</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>sum</span><span class=p>(</span><span class=n>X</span><span class=p>[</span><span class=n>clusters</span> <span class=o>==</span> <span class=n>j</span><span class=p>,:],</span><span class=n>axis</span><span class=o>=</span><span class=mi>0</span><span class=p>)</span><span class=o>/</span><span class=n>np</span><span class=o>.</span><span class=n>sum</span><span class=p>(</span><span class=n>clusters</span> <span class=o>==</span> <span class=n>j</span><span class=p>)</span>   
+            
+    <span class=k>return</span> <span class=n>m</span><span class=p>,</span> <span class=n>clusters</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>And here is the definition of function <code>dist</code></p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=k>def</span> <span class=nf>dist</span><span class=p>(</span><span class=n>x</span><span class=p>,</span> <span class=n>y</span><span class=p>):</span>
+    <span class=k>return</span> <span class=n>np</span><span class=o>.</span><span class=n>sqrt</span><span class=p>(</span><span class=n>np</span><span class=o>.</span><span class=n>sum</span><span class=p>((</span><span class=n>x</span> <span class=o>-</span> <span class=n>y</span><span class=p>)</span> <span class=o>**</span> <span class=mi>2</span><span class=p>,</span> <span class=n>axis</span><span class=o>=</span><span class=mi>1</span><span class=p>))</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=picking-k>Picking K</h3>
+<p>At this point you might be asking the questions how to pick the correct number of clusters because the choice of k can generate completely different result. A good technique is to use the <a href=https://en.wikipedia.org/wiki/Elbow_method_(clustering)>elbow method</a> .</p>
+<p>The elbow method is one of the most popular methods to determine the optimal number of clusters. We plot for different value of K on the x-axis, the distortion on the y-axis. We define distortion as the sum of distance between the data point and the centroid.
+Distortion = $\sum \lvert \lvert x_i-m_c \rvert \rvert $. At certain value of K we will notice shift in the graph trend which determines the optimal value of K.</p>
+<p>Let’s start by some arbitrary dataset consisting of three clusters as shown in the next figure, of course in real life we do not know in advance the actual number of clusters but we will use this example to see how the elbow method will do relative to what we know to be true.</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=kn>from</span> <span class=nn>sklearn.datasets</span> <span class=kn>import</span> <span class=n>make_blobs</span>
+<span class=n>x</span><span class=p>,</span> <span class=n>y</span> <span class=o>=</span> <span class=n>make_blobs</span><span class=p>(</span><span class=n>n_samples</span><span class=o>=</span><span class=mi>20</span><span class=p>,</span> <span class=n>centers</span><span class=o>=</span><span class=mi>3</span><span class=p>,</span> <span class=n>n_features</span><span class=o>=</span><span class=mi>2</span><span class=p>)</span>
+<span class=n>plt</span><span class=o>.</span><span class=n>plot</span><span class=p>()</span>
+<span class=n>plt</span><span class=o>.</span><span class=n>title</span><span class=p>(</span><span class=s1>&#39;Dataset&#39;</span><span class=p>)</span>
+<span class=n>plt</span><span class=o>.</span><span class=n>scatter</span><span class=p>(</span><span class=n>x</span><span class=p>[:,</span><span class=mi>0</span><span class=p>],</span> <span class=n>x</span><span class=p>[:,</span><span class=mi>1</span><span class=p>])</span>
+<span class=n>plt</span><span class=o>.</span><span class=n>show</span><span class=p>()</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class=align-center>
+<p><img src=/images/k-means-clustering/three-clusters.png alt="three clusters example"></p>
+</div>
+<p>The next step is to apply k-means clustering algorithm for a range of value, calculate the distortion and plot it as a function of K. In this example we will try the k values in the range 1 to 10.</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=n>distortions</span> <span class=o>=</span> <span class=p>[]</span>
+<span class=n>K</span> <span class=o>=</span> <span class=nb>range</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span><span class=mi>10</span><span class=p>)</span>
+<span class=k>for</span> <span class=n>k</span> <span class=ow>in</span> <span class=n>K</span><span class=p>:</span>
+    <span class=n>m</span><span class=p>,</span> <span class=n>c</span> <span class=o>=</span> <span class=n>kMeans</span><span class=p>(</span><span class=n>x</span><span class=p>,</span> <span class=n>k</span><span class=p>)</span>
+    <span class=n>distortion</span> <span class=o>=</span> <span class=mi>0</span>
+    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=nb>len</span><span class=p>(</span><span class=n>x</span><span class=p>)):</span>
+            <span class=n>distortion</span> <span class=o>=</span> <span class=n>distortion</span> <span class=o>+</span> <span class=n>np</span><span class=o>.</span><span class=n>min</span><span class=p>(</span><span class=n>dist</span><span class=p>(</span><span class=n>x</span><span class=p>[</span><span class=n>i</span><span class=p>,:],</span> <span class=n>m</span><span class=p>))</span>
+    <span class=n>distortions</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>distortion</span><span class=o>/</span> <span class=n>x</span><span class=o>.</span><span class=n>shape</span><span class=p>[</span><span class=mi>0</span><span class=p>])</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>We can then plot the distortions as a function of k. we then notice the elbow shape the curve makes at K=3 indicating the optimal value for the number of clusters.</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=n>plt</span><span class=o>.</span><span class=n>plot</span><span class=p>(</span><span class=n>K</span><span class=p>,</span> <span class=n>distortions</span><span class=p>,</span> <span class=s1>&#39;*-&#39;</span><span class=p>)</span>
+<span class=n>plt</span><span class=o>.</span><span class=n>xlabel</span><span class=p>(</span><span class=s1>&#39;k&#39;</span><span class=p>)</span>
+<span class=n>plt</span><span class=o>.</span><span class=n>ylabel</span><span class=p>(</span><span class=s1>&#39;Distortion&#39;</span><span class=p>)</span>
+<span class=n>plt</span><span class=o>.</span><span class=n>title</span><span class=p>(</span><span class=s1>&#39;The Elbow Method&#39;</span><span class=p>)</span>
+<span class=n>plt</span><span class=o>.</span><span class=n>show</span><span class=p>()</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class=align-center>
+<p><img src=/images/k-means-clustering/elbow-method.png alt="elbow method"></p>
+</div>
+<h3 id=shortcomings>Shortcomings</h3>
+<p>Because we are using the Euclidean distance when measuring the distance to the centroids, K-means algorithm prefer clusters that have circular shapes even when a better cluster shape is more appropriate. For example, let’s look at dataset of two interleaving circles (<a href=https://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_moons.html>make_moons in sklearn</a>).</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=kn>from</span> <span class=nn>sklearn.datasets</span> <span class=kn>import</span> <span class=n>make_moons</span>
+<span class=n>x</span><span class=p>,</span> <span class=n>y</span> <span class=o>=</span> <span class=n>make_moons</span><span class=p>(</span><span class=n>n_samples</span><span class=o>=</span><span class=mi>20</span><span class=p>)</span>
+<span class=n>plt</span><span class=o>.</span><span class=n>plot</span><span class=p>()</span>
+<span class=n>plt</span><span class=o>.</span><span class=n>title</span><span class=p>(</span><span class=s1>&#39;Two interleaving half-circles&#39;</span><span class=p>)</span>
+<span class=n>plt</span><span class=o>.</span><span class=n>scatter</span><span class=p>(</span><span class=n>x</span><span class=p>[:,</span><span class=mi>0</span><span class=p>],</span> <span class=n>x</span><span class=p>[:,</span><span class=mi>1</span><span class=p>],</span><span class=n>c</span><span class=o>=</span><span class=n>y</span><span class=p>)</span>
+<span class=n>plt</span><span class=o>.</span><span class=n>show</span><span class=p>()</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class=align-center>
+<p><img src=/images/k-means-clustering/make_moons.png alt="make moons example"></p>
+</div>
+<p>However, if we try to apply K-means algorithm using two clustering we will get two different clusters. Although it is a valid clustering it might not be the best way to divide the dataset to make inferences about the dataset.</p>
+<div class=align-center>
+<p><img src=/images/k-means-clustering/make_moons_clusterd.png alt="make moons clustered"></p>
+</div>
+<h3 id=matrix-factorization-perspective>Matrix Factorization Perspective</h3>
+<p>I learnt about this idea from the fantastic book <a href=https://www.amazon.com/Machine-Learning-Refined-Foundations-Applications/dp/1108480721>Machine Learning Refined book</a>. The books is filled with many insights about machine learning algorithms from an optimization point of you and I encourage you to check it out.</p>
+<p>In our implementation, there are a set of points $X$ and the aim is to find K cluster centroids $C$ and assign each point $x$ to a particular cluster $c_k$ so that the assigned centroid is as close to the point as possible. i.e., if $e_k$ is all zeros vector except at entry k, then we want:</p>
+<p>$$
+C e_k = c_k \approx x_p \quad \text{for all points} \quad x_p \in X
+$$</p>
+<p>The trick is we can rewrite this objective in matrix notation as $CW \approx X$, and lo and behold we arrive at the canonical <a href=https://developers.google.com/machine-learning/recommendation/collaborative/matrix>matrix factorization from</a>. In this from, $W$ is the weight matrix with the special constraint that each column contains a single nonzero entry that determines assignment of points to clusters. The next figure shows this framing for our <a href=#worked-example>worked example</a>.</p>
+<div class=align-center>
+<p><img src=/images/k-means-clustering/mf.png alt="k-means as matrix factorization"></p>
+</div>
+<p>In this framing, K-means can be analyzed as an optimization problem with an objective function to be minimized and we can track and analyze the progress of the algorithm on each iteration.</p>
+<h3 id=conclusion>Conclusion</h3>
+<p>In this post, we looked at the K-means clustering algorithm. We then looked at the algorithm steps and visualized some examples. We also discussed how to determine the optimal number of clusters and when the algorithm might not produce the best results. Finally, we discussed how K-means, a heuristic algorithm, can be viewed from the lens of an optimization framework.</p>
+</div>
+<footer class=post-footer>
+<nav class=post-nav>
+<a class=next href=/post/how-to-speak/>
+<span class="next-text nav-default">How to Speak</span>
+<span class="next-text nav-mobile">Next</span>
+<i class="iconfont icon-right"></i>
+</a>
+</nav>
+</footer>
+</article>
+</div>
+</div>
+</main>
+<footer id=footer class=footer>
+<div class=social-links>
+<a href=https://github.com/MostafaEissa class="iconfont icon-github" title=github></a>
+<a href=https://mostafaeissa.github.io/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a>
+</div>
+<div class=copyright>
+<span class=power-by>
+Powered by <a class=hexo-link href=https://gohugo.io>Hugo</a>
+</span>
+<span class=division>|</span>
+<span class=theme-info>
+Theme -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a>
+</span>
+<span class=copyright-year>
+&copy;
+2019 -
+2021<span class=heart><i class="iconfont icon-heart"></i></span><span>Mostafa Abdelrahman</span>
+</span>
+</div>
+</footer>
+<div class=back-to-top id=back-to-top>
+<i class="iconfont icon-up"></i>
+</div>
+</div>
+<script type=text/javascript src=/lib/jquery/jquery-3.2.1.min.js></script>
+<script type=text/javascript src=/lib/slideout/slideout-1.0.1.min.js></script>
+<script type=text/javascript src=/lib/fancybox/jquery.fancybox-3.1.20.min.js></script>
+<script type=text/javascript src=/js/main.min.b9b83715ef36d47306eef3107cac0706a20908596d09bdbf53f6ac25dc8bd225.js></script>
+<script type=text/javascript>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]}}</script>
+<script async src=https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin=anonymous></script>
+</body>
+</html>

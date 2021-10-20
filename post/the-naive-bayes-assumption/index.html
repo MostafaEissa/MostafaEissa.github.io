@@ -1,0 +1,288 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
+<title>The Naive Bayes Assumtion - Beyond Lambda</title>
+<meta name=renderer content="webkit">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta http-equiv=cache-control content="no-transform">
+<meta http-equiv=cache-control content="no-siteapp">
+<meta name=theme-color content="#f8f5ec">
+<meta name=msapplication-navbutton-color content="#f8f5ec">
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec">
+<meta name=author content="Mostafa Abdelrahman"><meta name=description content="The Naïve Bayes classifier is a popular machine learning algorithm. In this post we will discuss why it still works in practice even when the (naïve) conditional independence assumption is violated.
+">
+<meta name=generator content="Hugo 0.88.1 with theme even">
+<link rel=canonical href=https://mostafaeissa.github.io/post/the-naive-bayes-assumption/>
+<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
+<link rel=manifest href=/manifest.json>
+<link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5>
+<link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet>
+<link href=/lib/fancybox/jquery.fancybox-3.1.20.min.css rel=stylesheet>
+<meta property="og:title" content="The Naive Bayes Assumtion">
+<meta property="og:description" content="The Naïve Bayes classifier is a popular machine learning algorithm. In this post we will discuss why it still works in practice even when the (naïve) conditional independence assumption is violated.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://mostafaeissa.github.io/post/the-naive-bayes-assumption/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2020-03-11T00:00:00+00:00">
+<meta property="article:modified_time" content="2020-03-11T00:00:00+00:00">
+<meta itemprop=name content="The Naive Bayes Assumtion">
+<meta itemprop=description content="The Naïve Bayes classifier is a popular machine learning algorithm. In this post we will discuss why it still works in practice even when the (naïve) conditional independence assumption is violated."><meta itemprop=datePublished content="2020-03-11T00:00:00+00:00">
+<meta itemprop=dateModified content="2020-03-11T00:00:00+00:00">
+<meta itemprop=wordCount content="1251">
+<meta itemprop=keywords content><meta name=twitter:card content="summary">
+<meta name=twitter:title content="The Naive Bayes Assumtion">
+<meta name=twitter:description content="The Naïve Bayes classifier is a popular machine learning algorithm. In this post we will discuss why it still works in practice even when the (naïve) conditional independence assumption is violated."><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]-->
+</head>
+<body>
+<div id=mobile-navbar class=mobile-navbar>
+<div class=mobile-header-logo>
+<a href=/ class=logo>Beyond Lambda</a>
+</div>
+<div class=mobile-navbar-icon>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+<nav id=mobile-menu class="mobile-menu slideout-menu">
+<ul class=mobile-menu-list>
+<a href=/>
+<li class=mobile-menu-item>Home</li>
+</a><a href=/post/>
+<li class=mobile-menu-item>Archives</li>
+</a><a href=/about/>
+<li class=mobile-menu-item>About</li>
+</a>
+</ul>
+</nav>
+<div class=container id=mobile-panel>
+<header id=header class=header>
+<div class=logo-wrapper>
+<a href=/ class=logo>Beyond Lambda</a>
+</div>
+<nav class=site-navbar>
+<ul id=menu class=menu>
+<li class=menu-item>
+<a class=menu-item-link href=/>Home</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/post/>Archives</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/about/>About</a>
+</li>
+</ul>
+</nav>
+</header>
+<main id=main class=main>
+<div class=content-wrapper>
+<div id=content class=content>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title>The Naive Bayes Assumtion</h1>
+<div class=post-meta>
+<span class=post-time> 2020-03-11 </span>
+<div class=post-category>
+<a href=/categories/machine-learning/> Machine Learning </a>
+</div>
+<span class=more-meta> 1251 words </span>
+<span class=more-meta> 6 mins read </span>
+</div>
+</header>
+<div class=post-toc id=post-toc>
+<h2 class=post-toc-title>Contents</h2>
+<div class="post-toc-content always-active">
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href=#introduction>Introduction</a></li>
+<li><a href=#what-is-conditional-independence>What is conditional independence?</a></li>
+<li><a href=#what-happens-in-practice>What Happens in practice?</a></li>
+<li><a href=#why-does-it-work>Why does it work?</a></li>
+<li><a href=#conclusion>Conclusion</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<div class=post-content>
+<p>The Naïve Bayes classifier is a popular machine learning algorithm. In this post we will discuss why it still works in practice even when the (naïve) conditional independence assumption is violated.</p>
+<h3 id=introduction>Introduction</h3>
+<p>The Naïve Bayes classifier is a machine algorithm that can be used for classification tasks, similar to the <a href=https://mostafaeissa.github.io/2020/02/26/the-perceptron.html>perceptron algorithm</a>. It is a probabilistic machine learning method which means it relies on probability theory to calculate the probability of a specific class given the input features.</p>
+<p>For example, consider an input instance $X=(x_1,x_2,…,x_n)$ and output labels $Y \in$ {$+1,-1$} , the Naïve Bayes classifier calculates $P(Y=+1│x_1,x_2,…,x_n)$ and $P(Y=-1│x_1,x_2,…,x_n)$ and then picks the class that has a higher probability. To calculate these probabilities, the algorithm relies on Bayes rule which allows the probability defined above to be rewritten. Let $C_k \in$ {$+1,-1$} then:</p>
+<p>$$
+P(Y=C_k│x_1,x_2,…,x_n ) = \frac{P(x_1,x_2,…,x_n│Y=C_k) P(Y=C_k)}{P(x_1,x_2,…,x_n)}
+$$</p>
+<p>Now, the naïve conditional independence assumption comes into play. Basically the algorithm assumes that the features are conditionally independent on the output label $C_k$ and this allows us to rewrite the term $P(x_1,x_2,…,x_n│Y=C_k)$ as a product of easier to compute terms, mainly:</p>
+<p>$$P(x_1,x_2,…,x_n│Y=C_k)=\prod \limits_{i=1}^{n} P(x_i│Y=C_k)$$</p>
+<h3 id=what-is-conditional-independence>What is conditional independence?</h3>
+<p>Before we go further let’s take a detour and give some intuition on what it means to be <em>conditionally independent</em>. For starters, two events A and B are independent if the occurrence of one event has no effect on the occurrence of the other, in probability terms we say $P(A│B) = P(A)$ if $A$ and $B$ are independent. For example, the probability of the event $A$: a coin will land heads and the event $B$: it is raining outside are independent.</p>
+<p>However, conditional independence is always with respect to a third event so we say events $A$ and $B$ are conditionally independent given event $C$, in probability terms we say $P(A│B,C)=P(A│C)$ if $A$ and $B$ are conditionally independent given $C$.</p>
+<p>To understand it better let us consider this <a href=https://www.eecs.qmul.ac.uk/~norman/BBNs/Independence_and_conditional_independence.htm>nice example</a>. Suppose that we toss the same coin twice where event $A$ is the outcome of the first toss and event $B$ is the outcome of the second toss, both events are dependent on the bias of the coin (its tendency to produce a certain output more) Now if $C$ is the event that the coin is double sided then once we observe the event $C$ the output of event $B$ has no effect on the outcome of event $A$, hence, events $A$ and $B$ are conditionally independent given event $C$.</p>
+<h3 id=what-happens-in-practice>What Happens in practice?</h3>
+<p>In practice, the Naïve assumption is often violated. For example, trying to predict a plant type based on width, height and color of the leaves. The classifier assumes that all these features are independent without consideration of their effect on each other. In this case the width and height are dependent so the assumption is over estimating the true probability.
+Another example, in <a href=https://nlp.stanford.edu/IR-book/html/htmledition/text-classification-and-naive-bayes-1.html>text classification</a>, each classification class $C_k$ considers all possible text values for word $i$ regardless on other words within a small window of that word.
+As such, the conditional independence assumption will often either over estimate or underestimate the probability $P(x_1,x_2,…,x_n│Y=C_k)$ which makes the total probability $P(Y=C_k│X)$ incorrect. <em><strong>So where is the catch?</strong></em></p>
+<h3 id=why-does-it-work>Why does it work?</h3>
+<p>The answer to this question appeared in a paper from 1997 titled <a href=https://link.springer.com/content/pdf/10.1023/A:1007413511361.pdf>On the Optimality of the Simple Bayesian Classifier under Zero-One Loss</a>. In that paper, the authors argued that the although the Naïve Bayes algorithm only estimated the probabilities $P(Y=+1│X)$ and $P(Y=-1│X)$.</p>
+<p>Let $r = P(Y=+1)\prod \limits_{i=1}^{n} P(x_i│Y=+1)$ and $s = P(Y=-1)\prod \limits_{i=1}^{n} P(x_i│Y=-1)$, the output of the classifier is optimal if and only if:</p>
+<p>$$
+(P(Y=+1│X)>1/2 \enspace\text{and}\enspace r \geq s)
+\enspace\text{or}\enspace
+(P(Y=+1│X)&lt;1/2 \enspace\text{and}\enspace r \leq s)
+$$</p>
+<p>In other words, it does not matter if the Naïve Bayes classifier overestimatea or under estimatea the probabilities as long as the correct ratio is maintained between the true and estimated probabilities.</p>
+<p>To make this idea of optimality clearer, let’s us describe an example, that appeared in the same paper, about a dataset with three Boolean attributes $A$, $B$ and $C$ (each attribute can have only the values 0 or 1). Assume that $P(+) = P(-) = \frac{1}{2}$ i.e. negative and positive classes are equally probable in the dataset. Furthermore, assume that $A$ and $C$ are independent but $A = B$ which clearly <em>violates</em> the conditional independence assumption of Naïve Bayes.</p>
+<p>A theoretical optimal classifier will choose to ignore the attribute $B$ because it does not add any new information and it will calculate the probabilities $P(Y=+1│X)$ and $P(Y=-1│X)$ as follows:</p>
+<p>$$
+\begin{aligned}
+P(Y=+1│X) &= \frac{P(A│Y=+1)P(C│Y=+1)P(Y=+1)}{P(X)} \newline
+\enspace \newline
+P(Y=-1│X) &= \frac{P(A│Y=-1)P(C│Y=-1)P(Y=-1)}{P(X)}
+\end{aligned}
+$$</p>
+<p>As such, the optimal classifier will assign the positive $+$ class if $P(Y=+1│X)- P(Y=-1│X)>0$ using the above expression for expansion and simplifying the result yields:</p>
+<p>$$
+\begin{equation}
+\label{optimal decision}
+P(A│Y=+1)P(C│Y=+1)-P(A│Y=-1)P(C│Y=-1)>0
+\end{equation}
+$$</p>
+<p>On the other hand, the Naïve Bayes classifier does not ignore the attribute B and it is included in the calculations which give the following definitions for $P(Y=+1│X)$ and $P(Y=-1│X)$:</p>
+<p>$$
+\begin{aligned}
+P(Y=+1│X) &= \frac{P(A│Y=+1)P(B│Y=+1)P(C│Y=+1)P(Y=+1)}{P(X)} \newline
+\enspace \newline
+P(Y=-1│X) &= \frac{P(A│Y=-1)P(B│Y=-1)P(C│Y=+1)P(Y=-1)}{P(X)}
+\end{aligned}
+$$</p>
+<p>The Naïve Bayes classifier assigns the positive $+$ class if $P(Y=+1│X)- P(Y=-1│X)>0$ using the above expression for expansion, the fact that $A = B$ and simplifying the result yields:</p>
+<p>$$
+\begin{equation}
+\label{naive decision}
+P(A│Y=+1)^2 P(C│Y=+1)-P(A│Y=-1)^2 P(C│Y=-1)>0
+\end{equation}
+$$</p>
+<p>We can simplify equations $\eqref{optimal decision}$ and $\eqref{naive decision}$ even more by applying the Bayes rule again where we can rewrite $P(A│Y=+1) = \frac{P(Y=+1│A)P(A)}{P(Y=+1)}$, $P(A│Y=-1)=\frac{P(Y=-1│A)P(A)}{P(Y=-1)}$ and we can also do the same for $P(C│Y=+1)$ and $P(C│Y=-1)$.</p>
+<p>Plugging these rewrites into the optimal classifier decision equations it becomes:</p>
+<p>$$\frac{P(Y=+1|A)P(A)}{P(Y=+1)}\frac{P(Y=+1|C)P(C)}{P(Y=+1)}-\frac{P(Y=-1|A)P(A)}{P(Y=-1)}\frac{P(Y=-1|C)P(C)}{P(Y=-1)}>0$$</p>
+<p>Using the fact that $P(+) = P(-) = \frac{1}{2}$ we get:</p>
+<p>$$P(Y=+1|A)P(A)P(Y=+1|C)P(C)-P(Y=-1│A)P(A)(Y=-1|C)P(C)>0$$</p>
+<p>Cancelling $P(A)P(C)$ from both sides:</p>
+<p>$$
+\begin{equation}
+\label{optimal decision simplified}
+P(Y=+1│A)P(Y=+1│C)-P(Y=-1│A)(Y=-1│C)>0
+\end{equation}
+$$</p>
+<p>Similarly, plugging these rewrites into the Naïve Bayes classifier decision equations it becomes:</p>
+<p>$$\left(\frac{P(Y=+1|A)P(A)}{P(Y=+1)}\right)^2\frac{P(Y=+1|C)P(C)}{P(Y=+1)}-\left(\frac{P(Y=-1│A)P(A)}{P(Y=-1)}\right)^2 \frac{P(Y=-1│C)P(C)}{P(Y=-1)}>0$$</p>
+<p>Using the fact that $P(+) = P(-) =\frac{1}{2}$ we get:</p>
+<p>$$P(Y=+1│A)^2 P(A)^2 P(Y=+1│C)P(C)-P(Y=-1│A)^2 P(A)^2 (Y=-1│C)P(C)>0$$</p>
+<p>Cancelling $P(A)^2P(C)$ from both sides:</p>
+<p>$$
+\begin{equation}
+\label{naive decision simplified}
+P(Y=+1│A)^2 P(Y=+1│C)-P(Y=-1│A)^2 (Y=-1│C)>0
+\end{equation}
+$$</p>
+<p>Let $P(Y=+1│A)=p$ and $P(Y=+1│C)=q$ so $P(Y=-1│A)=1-p$ and $P(Y=-1│C)=1-q$. Plugging p, q into the decision functions \eqref{optimal decision simplified} and \eqref{naive decision simplified} (to make the expressions more readable) we obtain:</p>
+<p>The optimal classifier decision:</p>
+<p>$$
+\begin{aligned}
+P(Y=+1|A)P(Y=+1|C)-P(Y=-1|A)(Y=-1|C) &> 0 \newline
+pq-(1-p)(1-q) &> 0 \newline
+pq-(1+pq-p-q) &> 0 \newline
+pq-1-pq+p+q &> 0 \newline
+-1+p+q &> 0 \newline
+\end{aligned}
+$$</p>
+<p>Which results in a decision boundary descibed by:</p>
+<p>$$
+\begin{equation}
+\label{optimal final}
+q > 1-p
+\end{equation}
+$$</p>
+<p>The Naïve Bayes classifier decision:</p>
+<p>$$
+\begin{aligned}
+P(Y=+1│A)^2 P(Y=+1│C)-P(Y=-1│A)^2 (Y=-1│C) &> 0 \newline
+p^2 q-(1-p)^2 (1-q) &> 0 \newline
+p^2 q-(1-p)^2+q(1-p^2 ) &> 0 \newline
+q(p^2+(1-p)^2 )-(1-p^2 ) &> 0<br>
+\end{aligned}</p>
+<p>$$</p>
+<p>Which results in a decision boundary descibed by:</p>
+<p>$$
+\begin{equation}
+\label{naive final}
+q > \frac{(1-p)^2}{p^2+(1-p)^2}
+\end{equation}
+$$</p>
+<p>The figure below shows the plot of these two decision boundaries \eqref{optimal final} and \eqref{naive final}. Notice that the two decision boundary are exactly equally at only three points the Naïve Bayes classifier is optimal except only in the two shaded regions that are above one of the curves and below the other where it disagrees with the optimal procedure. As such, the Naïve Bayes classifier is optimal in a far larger region than just wanting the probabilities to be exact which makes it much more successful in practice.</p>
+<div class=align-center>
+<p><img src=/images/the-naive-bayes-assumption/decision-boundaries.png alt="Decision Boundaries"></p>
+</div>
+<h3 id=conclusion>Conclusion</h3>
+<p>In this post, we looked at the Naïve Bayes algorithm. We then looked at the conditional independence assumption and examples of when it is violated in practive. We then looked at why Naïve Bayes works so well in practice.</p>
+</div>
+<footer class=post-footer>
+<nav class=post-nav>
+<a class=prev href=/post/value-rigidity/>
+<i class="iconfont icon-left"></i>
+<span class="prev-text nav-default">Value Rigidity</span>
+<span class="prev-text nav-mobile">Prev</span>
+</a>
+<a class=next href=/post/the-perceptron/>
+<span class="next-text nav-default">The Perceptron</span>
+<span class="next-text nav-mobile">Next</span>
+<i class="iconfont icon-right"></i>
+</a>
+</nav>
+</footer>
+</article>
+</div>
+</div>
+</main>
+<footer id=footer class=footer>
+<div class=social-links>
+<a href=https://github.com/MostafaEissa class="iconfont icon-github" title=github></a>
+<a href=https://mostafaeissa.github.io/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a>
+</div>
+<div class=copyright>
+<span class=power-by>
+Powered by <a class=hexo-link href=https://gohugo.io>Hugo</a>
+</span>
+<span class=division>|</span>
+<span class=theme-info>
+Theme -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a>
+</span>
+<span class=copyright-year>
+&copy;
+2019 -
+2021<span class=heart><i class="iconfont icon-heart"></i></span><span>Mostafa Abdelrahman</span>
+</span>
+</div>
+</footer>
+<div class=back-to-top id=back-to-top>
+<i class="iconfont icon-up"></i>
+</div>
+</div>
+<script type=text/javascript src=/lib/jquery/jquery-3.2.1.min.js></script>
+<script type=text/javascript src=/lib/slideout/slideout-1.0.1.min.js></script>
+<script type=text/javascript src=/lib/fancybox/jquery.fancybox-3.1.20.min.js></script>
+<script type=text/javascript src=/js/main.min.b9b83715ef36d47306eef3107cac0706a20908596d09bdbf53f6ac25dc8bd225.js></script>
+<script type=text/javascript>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],tags:'ams'}}</script>
+<script async src=https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin=anonymous></script>
+</body>
+</html>

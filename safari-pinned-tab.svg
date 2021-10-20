@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 135.46667 135.46667"
+   version="1.1"
+   id="svg5"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2">
+    <rect
+       x="357.53333"
+       y="381.8186"
+       width="98.490311"
+       height="228.01181"
+       id="rect13963" />
+    <rect
+       x="298.16928"
+       y="310.31192"
+       width="198.3298"
+       height="149.75925"
+       id="rect495" />
+  </defs>
+  <g
+     id="layer1">
+    <text
+       xml:space="preserve"
+       transform="scale(0.26458333)"
+       id="text493"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect495);fill:#000000;fill-opacity:1;stroke:none" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:105.833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;inline-size:54.2316;fill:#c15b4c;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="94.240387"
+       y="101.37981"
+       id="text2547"
+       transform="matrix(1.5915638,0,0,1.2781305,-125.28044,-19.869059)"><tspan
+         x="94.240387"
+         y="101.37981"
+         id="tspan28269"><tspan
+           style="font-size:88.1944px;font-family:'Cascadia Code PL';-inkscape-font-specification:'Cascadia Code PL'"
+           id="tspan28267">λ</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       transform="scale(0.26458333)"
+       id="text13961"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect13963);fill:#000000;fill-opacity:1;stroke:none" />
+  </g>
+</svg>
