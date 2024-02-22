@@ -1,7 +1,3 @@
-<div class="copyright">
-Disclaimer: The posts on this site are my own and do not represent my employer's view in any way.
-<div>
-<br/>
 <div class="social-links">
   {{- range $name, $path := .Site.Params.social }}
     {{- if $path }}
@@ -12,10 +8,7 @@ Disclaimer: The posts on this site are my own and do not represent my employer's
   {{ if .Site.LanguagePrefix -}}
     <a href="{{ .Site.LanguagePrefix | absURL }}/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
   {{- else -}}
-	{{ with .OutputFormats.Get "rss" -}}
-	  {{ printf `<a type=%q href=%q title=%q class=%q></a>`  .MediaType.Type .Permalink "rss" "iconfont icon-rss" | safeHTML }}
-	{{ end }}
-
+    <a href="{{ .Site.RSSLink }}" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
   {{- end }}
 </div>
 

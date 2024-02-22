@@ -15,7 +15,7 @@ pygmentsCodefencesGuessSyntax = true
 
 paginate = 10
 
-[author]
+[params.author]
   name = "Mostafa Abdelrahman"
 
 [sitemap]
