@@ -52,6 +52,6 @@ Disclaimer: The posts on this site are my own and do not represent my employer's
     {{ end }}
     {{- $current -}}
     <span class="heart"><i class="iconfont icon-heart"></i></span><!--
-    --><span>{{if .Site.Copyright }}{{ .Site.Copyright | safeHTML }}{{ else }}{{ .Site.Author.name | safeHTML }}{{ end }}</span>
+    --><span>{{if .Site.Copyright }}{{ .Site.Copyright | safeHTML }}{{ else }}{{ .Site.Params.Author.name | safeHTML }}{{ end }}</span>
   </span>
 </div>
