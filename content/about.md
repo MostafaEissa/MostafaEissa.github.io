@@ -2,9 +2,14 @@
 title: "About Me"
 ---
 
-Hello there! 
+Hey there!
 
-My name is Mostafa. I got my BSc in Computer Engineering, then worked in industry for a few years in various business intelligence and data science positions. Later, I decided to go back to grad school, where I received an MSc in Data Science. 
+I'm Mostaf, a senior data scientist with a knack for turning data into insights that drive business decisions. My journey began over 8 years ago in software engineering, business consulting, and data engineering. With a background in computer engineering and a master's in data science, I specialize in machine learning, big data management, and business analytics.
 
-Although my day job is data science, my interests in computer science are much wider. They include parallel and distributed systems, machine learning and compilers. Occasionally I write about things I find interesting. 
+From crafting scalable data solutions using tools like dbt, Tableau, and SQL to diving deep into A/B testing, recommendation engines, and fraud detection, I thrive on solving complex problems. Whether it's optimizing processes with machine learning algorithms or delving into deep learning applications, I'm all about delivering measurable outcomes.
 
+What I love most about data science is its versatility — each project brings new challenges in different domains like e-commerce, advertising, and beyond. I enjoy collaborating with diverse teams to uncover insights that align with business goals.
+
+Outside of work, I'm passionate about continuous learning. Through this blog and mentoring junior data scientists, I share insights and lessons learned along the way.
+
+Let's dive into the world of data together!
