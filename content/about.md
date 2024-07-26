@@ -4,9 +4,7 @@ title: "About Me"
 
 Hey there!
 
-I'm Mostaf, a senior data scientist with a knack for turning data into insights that drive business decisions. My journey began over 8 years ago in software engineering, business consulting, and data engineering. With a background in computer engineering and a master's in data science, I specialize in machine learning, big data management, and business analytics.
-
-From crafting scalable data solutions using tools like dbt, Tableau, and SQL to diving deep into A/B testing, recommendation engines, and fraud detection, I thrive on solving complex problems. Whether it's optimizing processes with machine learning algorithms or delving into deep learning applications, I'm all about delivering measurable outcomes.
+I'm Mostafa, a senior data scientist with a knack for turning data into insights that drive business decisions. My journey began over 8 years ago in software engineering, business consulting, and data engineering. With a background in computer engineering and a master's in data science, I specialize in machine learning, big data management, and business analytics.
 
 What I love most about data science is its versatility — each project brings new challenges in different domains like e-commerce, advertising, and beyond. I enjoy collaborating with diverse teams to uncover insights that align with business goals.
 
