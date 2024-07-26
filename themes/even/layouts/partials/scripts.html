@@ -92,24 +92,6 @@
   {{- end }}
 {{- end }}
 
-<!-- Analytics -->
-{{- if (in (slice (getenv "HUGO_ENV") hugo.Environment) "production") | and .Site.GoogleAnalytics -}}
-  {{ template "_internal/google_analytics_async.html" . }}
-{{- end -}}
-
-{{- with .Site.Params.baiduAnalytics -}}
-<script id="baidu_analytics">
-  var _hmt = _hmt || [];
-  (function() {
-    if (window.location.hostname === 'localhost') return;
-    var hm = document.createElement("script"); hm.async = true;
-    hm.src = "https://hm.baidu.com/hm.js?{{.}}";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-  })();
-</script>
-{{- end }}
-
 <!-- baidu push -->
 {{- if .Site.Params.baiduPush -}}
 <script id="baidu_push">
