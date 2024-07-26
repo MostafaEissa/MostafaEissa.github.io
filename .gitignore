@@ -1,2 +1,4 @@
 diagrams/
 public/
+hugo.exe
+.hugo_build.lock
