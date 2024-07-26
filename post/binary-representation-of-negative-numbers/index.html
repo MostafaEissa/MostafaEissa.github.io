@@ -1,172 +1,18 @@
-<!doctype html><html lang=en>
-<head>
-<meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
-<title>Binary Representation of Negative Numbers - Beyond Lambda</title>
-<meta name=renderer content="webkit">
-<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
-<meta http-equiv=cache-control content="no-transform">
-<meta http-equiv=cache-control content="no-siteapp">
-<meta name=theme-color content="#f8f5ec">
-<meta name=msapplication-navbutton-color content="#f8f5ec">
-<meta name=apple-mobile-web-app-capable content="yes">
-<meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec">
-<meta name=author content="Mostafa Abdelrahman"><meta name=description content="Many of you already know that to in computer systems, to represent the negative numbers we use what is known as 2’s complement. In this article I will try to explain where it came from.
-">
-<meta name=generator content="Hugo 0.89.2 with theme even">
-<link rel=canonical href=https://mostafaeissa.github.io/post/binary-representation-of-negative-numbers/>
-<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
-<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
-<link rel=manifest href=/manifest.json>
-<link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5>
-<link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet>
-<link href=/lib/fancybox/jquery.fancybox-3.1.20.min.css rel=stylesheet>
-<meta property="og:title" content="Binary Representation of Negative Numbers">
-<meta property="og:description" content="Many of you already know that to in computer systems, to represent the negative numbers we use what is known as 2’s complement. In this article I will try to explain where it came from.">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://mostafaeissa.github.io/post/binary-representation-of-negative-numbers/"><meta property="article:section" content="post">
-<meta property="article:published_time" content="2021-11-14T00:00:00+00:00">
-<meta property="article:modified_time" content="2021-11-14T00:00:00+00:00">
-<meta itemprop=name content="Binary Representation of Negative Numbers">
-<meta itemprop=description content="Many of you already know that to in computer systems, to represent the negative numbers we use what is known as 2’s complement. In this article I will try to explain where it came from."><meta itemprop=datePublished content="2021-11-14T00:00:00+00:00">
-<meta itemprop=dateModified content="2021-11-14T00:00:00+00:00">
-<meta itemprop=wordCount content="790">
-<meta itemprop=keywords content><meta name=twitter:card content="summary">
-<meta name=twitter:title content="Binary Representation of Negative Numbers">
-<meta name=twitter:description content="Many of you already know that to in computer systems, to represent the negative numbers we use what is known as 2’s complement. In this article I will try to explain where it came from."><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
-<script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]-->
-</head>
-<body>
-<div id=mobile-navbar class=mobile-navbar>
-<div class=mobile-header-logo>
-<a href=/ class=logo>Beyond Lambda</a>
-</div>
-<div class=mobile-navbar-icon>
+<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>Binary Representation of Negative Numbers - Beyond Lambda</title>
+<meta name=renderer content="webkit"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta http-equiv=Cache-Control content="no-transform"><meta http-equiv=Cache-Control content="no-siteapp"><meta name=theme-color content="#f8f5ec"><meta name=msapplication-navbutton-color content="#f8f5ec"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec"><meta name=author content><meta name=description content="Many of you already know that to in computer systems, to represent the negative numbers we use what is known as 2’s complement. In this article I will try to explain where it came from.
+"><meta name=generator content="Hugo 0.129.0 with theme even"><link rel=canonical href=https://mostafaeissa.github.io/post/binary-representation-of-negative-numbers/><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/manifest.json><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet><link href=/lib/fancybox/jquery.fancybox-3.1.20.min.css rel=stylesheet><meta property="og:url" content="https://mostafaeissa.github.io/post/binary-representation-of-negative-numbers/"><meta property="og:site_name" content="Beyond Lambda"><meta property="og:title" content="Binary Representation of Negative Numbers"><meta property="og:description" content="Many of you already know that to in computer systems, to represent the negative numbers we use what is known as 2’s complement. In this article I will try to explain where it came from."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2021-11-14T00:00:00+00:00"><meta property="article:modified_time" content="2021-11-14T00:00:00+00:00"><meta itemprop=name content="Binary Representation of Negative Numbers"><meta itemprop=description content="Many of you already know that to in computer systems, to represent the negative numbers we use what is known as 2’s complement. In this article I will try to explain where it came from."><meta itemprop=datePublished content="2021-11-14T00:00:00+00:00"><meta itemprop=dateModified content="2021-11-14T00:00:00+00:00"><meta itemprop=wordCount content="790"><meta itemprop=keywords content="Programming"><meta name=twitter:card content="summary"><meta name=twitter:title content="Binary Representation of Negative Numbers"><meta name=twitter:description content="Many of you already know that to in computer systems, to represent the negative numbers we use what is known as 2’s complement. In this article I will try to explain where it came from."><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--></head><body><div id=mobile-navbar class=mobile-navbar><div class=mobile-header-logo><a href=/ class=logo>Beyond Lambda</a></div><div class=mobile-navbar-icon><span></span>
 <span></span>
-<span></span>
-<span></span>
-</div>
-</div>
-<nav id=mobile-menu class="mobile-menu slideout-menu">
-<ul class=mobile-menu-list>
-<a href=/>
-<li class=mobile-menu-item>Home</li>
-</a><a href=/post/>
-<li class=mobile-menu-item>Archives</li>
-</a><a href=/about/>
-<li class=mobile-menu-item>About</li>
-</a>
-</ul>
-</nav>
-<div class=container id=mobile-panel>
-<header id=header class=header>
-<div class=logo-wrapper>
-<a href=/ class=logo>Beyond Lambda</a>
-</div>
-<nav class=site-navbar>
-<ul id=menu class=menu>
-<li class=menu-item>
-<a class=menu-item-link href=/>Home</a>
-</li><li class=menu-item>
-<a class=menu-item-link href=/post/>Archives</a>
-</li><li class=menu-item>
-<a class=menu-item-link href=/about/>About</a>
-</li>
-</ul>
-</nav>
-</header>
-<main id=main class=main>
-<div class=content-wrapper>
-<div id=content class=content>
-<article class=post>
-<header class=post-header>
-<h1 class=post-title>Binary Representation of Negative Numbers</h1>
-<div class=post-meta>
-<span class=post-time> 2021-11-14 </span>
-<div class=post-category>
-<a href=/categories/programming/> Programming </a>
-</div>
-<span class=more-meta> 790 words </span>
-<span class=more-meta> 4 mins read </span>
-</div>
-</header>
-<div class=post-content>
-<p>Many of you already know that to in computer systems, to represent the negative numbers we use what is known as 2’s complement. In this article I will try to explain where it came from.</p>
-<h3 id=introduction>Introduction</h3>
-<p>A binary representation of a number of a sequence of bits (ones and zeroes) where each position represent the value 2 to the power of that position; the rightmost digit represent 2<sup>0</sup>, the next digit represent 2<sup>1</sup> and so on. The next figure shows a sample 8-bit representation with the value associated with each position.</p>
-<p><img src=/images/binary-representation/binary-representation.png alt=binary-representation></p>
-<p>So, if we have a binary number 0101, the right most digit is multiplies by 2<sup>0</sup>, the next digit will be multiplied by 2<sup>1</sup>, the digit thereafter is multiplied by 2<sup>2</sup> and so on.</p>
-<p>0101 = 1 x 2<sup>0</sup> + 0 x 2<sup>1</sup> + 1 x 2<sup>2</sup> + 0 x 2<sup>3</sup> = 1 + 0 + 4 + 0 = 5</p>
-<p>For N-bits the range of numbers that can be represented are 0 to 2<sup>N</sup>. In the above example, we have 8 bits and so we can represent numbers from 0 (00000000) to 2<sup>8</sup>-1=255(11111111)</p>
-<h3 id=what-about-negative-numbers>What about Negative Numbers?</h3>
-<p>This works great for positive numbers but how can we use the same notation to represent negative numbers and be able to distinguish them from negative numbers.</p>
-<p>One simple yet efficient solution to dedicate the leftmost bit to indicate the sign of the number (0 indicates a positive number with 1 indicates a negative number).</p>
-<p>For example, we know the binary representation of five is 101, so to store 5 and -5 in the 8 bit the representation would be as follows:</p>
-<p><img src=/images/binary-representation/positive_negative_five_basic.png alt=negative-five-basic-representation></p>
-<p>Notice that now we represent a different range of number from -127 (111111111) to 127 (01111111)</p>
-<p>This is good but it causes some inefficiencies when performing arithmetic operations (we will focus on addition and subtraction) because we need to look at the leftmost bit (most significant bit) to determine the sign of the number and then perform the desired operation.</p>
-<h3 id=can-we-come-up-with-a-better-representation>Can we come up with a better representation?</h3>
-<p>A first step is to use addition to represent subtraction as well. What I mean is if we have A – B then this can be written as A + (-B). Hence, we can convert subtract operations to addition operation of the one number and the negative of the other (A – B is addition of A and –B). This way we can simply the logic of our operations but this relies on a better representation for negative numbers that would achieve the correct result. Consider the following example:</p>
-<p><img src=/images/binary-representation/positive_negative_one_unknown.png alt=good-representation-negative-one></p>
-<p>We know that (+1) is represented as (00000001) and Zero is represented as (00000000), so what would be a good representation of (-1) such that (+1) + (-1) = (0).</p>
-<p>We Know that in binary addition, <em>0 + 0 = 0</em>, <em>0 + 1 = 1</em>, <em>1 + 1 = 0</em> (carry 1). If we set the rightmost bit to 1 then the addition is zero with carry 1. If we set the next bit to 1 then the addition is 1 + 0 + carry 1 = 0 (carry 1) and so on. So if we set all bits to 1 we will achieve the desired effect.</p>
-<p><img src=/images/binary-representation/positive_negative_one_solved.png alt=good-representation-negative-one></p>
-<p>Consider a general number A, we want to find –A such that <em>A + (-A) = 0</em>. This can be rewritten as: <em>-A = 0 – A</em>, which can further be written as <em>–A = (1 + (-1)) – A</em>, as we established that <em>0 = 1 + (-1)</em>. As such, <strong>-A = 1 + (-1 – A)</strong></p>
-<p>To illustrate, what is the result of 1 – A? for individual bits we know that 1 – 0 = 1 and 1 – 1 = 0 i.e it is the inverse of the bit so 1 – A (<strong>~A</strong>) is the bitwise inverse of A i.e. each bit is flipped. The bitwise inverse of A (<strong>~A</strong>) is known as <strong>1’s complement</strong>.rr</p>
-<p><img src=/images/binary-representation/negative_a_example.png alt=good-representation-general></p>
-<p>Back to our formula <em>-A = 1 + (-1 – A) = -A = 1 + ~A</em>. As such, the negative of a number can be found by finding the bitwise inverse and then adding one to the result and this is known as <strong>2’s complement</strong>.</p>
-<p>For example, -5 is represented using the 2’s complement of 5</p>
-<p>5 = <em>00000101</em>
+<span></span></div></div><nav id=mobile-menu class="mobile-menu slideout-menu"><ul class=mobile-menu-list><a href=/><li class=mobile-menu-item>Home</li></a><a href=/post/><li class=mobile-menu-item>Archives</li></a><a href=/about/><li class=mobile-menu-item>About</li></a></ul></nav><div class=container id=mobile-panel><header id=header class=header><div class=logo-wrapper><a href=/ class=logo>Beyond Lambda</a></div><nav class=site-navbar><ul id=menu class=menu><li class=menu-item><a class=menu-item-link href=/>Home</a></li><li class=menu-item><a class=menu-item-link href=/post/>Archives</a></li><li class=menu-item><a class=menu-item-link href=/about/>About</a></li></ul></nav></header><main id=main class=main><div class=content-wrapper><div id=content class=content><article class=post><header class=post-header><h1 class=post-title>Binary Representation of Negative Numbers</h1><div class=post-meta><span class=post-time>2021-11-14</span><div class=post-category><a href=/categories/programming/>Programming</a></div><span class=more-meta>790 words </span><span class=more-meta>4 mins read</span></div></header><div class=post-content><p>Many of you already know that to in computer systems, to represent the negative numbers we use what is known as 2’s complement. In this article I will try to explain where it came from.</p><h3 id=introduction>Introduction</h3><p>A binary representation of a number of a sequence of bits (ones and zeroes) where each position represent the value 2 to the power of that position; the rightmost digit represent 2<sup>0</sup>, the next digit represent 2<sup>1</sup> and so on. The next figure shows a sample 8-bit representation with the value associated with each position.</p><p><img src=/images/binary-representation/binary-representation.png alt=binary-representation></p><p>So, if we have a binary number 0101, the right most digit is multiplies by 2<sup>0</sup>, the next digit will be multiplied by 2<sup>1</sup>, the digit thereafter is multiplied by 2<sup>2</sup> and so on.</p><p>0101 = 1 x 2<sup>0</sup> + 0 x 2<sup>1</sup> + 1 x 2<sup>2</sup> + 0 x 2<sup>3</sup> = 1 + 0 + 4 + 0 = 5</p><p>For N-bits the range of numbers that can be represented are 0 to 2<sup>N</sup>. In the above example, we have 8 bits and so we can represent numbers from 0 (00000000) to 2<sup>8</sup>-1=255(11111111)</p><h3 id=what-about-negative-numbers>What about Negative Numbers?</h3><p>This works great for positive numbers but how can we use the same notation to represent negative numbers and be able to distinguish them from negative numbers.</p><p>One simple yet efficient solution to dedicate the leftmost bit to indicate the sign of the number (0 indicates a positive number with 1 indicates a negative number).</p><p>For example, we know the binary representation of five is 101, so to store 5 and -5 in the 8 bit the representation would be as follows:</p><p><img src=/images/binary-representation/positive_negative_five_basic.png alt=negative-five-basic-representation></p><p>Notice that now we represent a different range of number from -127 (111111111) to 127 (01111111)</p><p>This is good but it causes some inefficiencies when performing arithmetic operations (we will focus on addition and subtraction) because we need to look at the leftmost bit (most significant bit) to determine the sign of the number and then perform the desired operation.</p><h3 id=can-we-come-up-with-a-better-representation>Can we come up with a better representation?</h3><p>A first step is to use addition to represent subtraction as well. What I mean is if we have A – B then this can be written as A + (-B). Hence, we can convert subtract operations to addition operation of the one number and the negative of the other (A – B is addition of A and –B). This way we can simply the logic of our operations but this relies on a better representation for negative numbers that would achieve the correct result. Consider the following example:</p><p><img src=/images/binary-representation/positive_negative_one_unknown.png alt=good-representation-negative-one></p><p>We know that (+1) is represented as (00000001) and Zero is represented as (00000000), so what would be a good representation of (-1) such that (+1) + (-1) = (0).</p><p>We Know that in binary addition, <em>0 + 0 = 0</em>, <em>0 + 1 = 1</em>, <em>1 + 1 = 0</em> (carry 1). If we set the rightmost bit to 1 then the addition is zero with carry 1. If we set the next bit to 1 then the addition is 1 + 0 + carry 1 = 0 (carry 1) and so on. So if we set all bits to 1 we will achieve the desired effect.</p><p><img src=/images/binary-representation/positive_negative_one_solved.png alt=good-representation-negative-one></p><p>Consider a general number A, we want to find –A such that <em>A + (-A) = 0</em>. This can be rewritten as: <em>-A = 0 – A</em>, which can further be written as <em>–A = (1 + (-1)) – A</em>, as we established that <em>0 = 1 + (-1)</em>. As such, <strong>-A = 1 + (-1 – A)</strong></p><p>To illustrate, what is the result of 1 – A? for individual bits we know that 1 – 0 = 1 and 1 – 1 = 0 i.e it is the inverse of the bit so 1 – A (<strong>~A</strong>) is the bitwise inverse of A i.e. each bit is flipped. The bitwise inverse of A (<strong>~A</strong>) is known as <strong>1’s complement</strong>.rr</p><p><img src=/images/binary-representation/negative_a_example.png alt=good-representation-general></p><p>Back to our formula <em>-A = 1 + (-1 – A) = -A = 1 + ~A</em>. As such, the negative of a number can be found by finding the bitwise inverse and then adding one to the result and this is known as <strong>2’s complement</strong>.</p><p>For example, -5 is represented using the 2’s complement of 5</p><p>5 = <em>00000101</em>
 1’s complement (flip each bit) : <em>11111010</em>
-2’s complement (add 1 to 1’s complement):</p>
-<p><img src=/images/binary-representation/five_twos_complement.png alt=tows-complement-example></p>
-<p>Let’s give it a try:</p>
-<p><img src=/images/binary-representation/twos_complement_example.png alt=using-twos-complement-example></p>
-<h3 id=conclusion>Conclusion</h3>
-<p>In 2&rsquo;s complement representation, positive numbers are represented as themselves while negative numbers are represented by the 2&rsquo;s complement of their positive value. The 2&rsquo;s complement has the advantage that the addition and subtraction are identical to those for unsigned numbers as long as the inputs are represented in the same number of bits.</p>
-</div>
-<footer class=post-footer>
-<nav class=post-nav>
-<a class=next href=/post/the-luhn-formula/>
-<span class="next-text nav-default">The Luhn Formula</span>
+2’s complement (add 1 to 1’s complement):</p><p><img src=/images/binary-representation/five_twos_complement.png alt=tows-complement-example></p><p>Let’s give it a try:</p><p><img src=/images/binary-representation/twos_complement_example.png alt=using-twos-complement-example></p><h3 id=conclusion>Conclusion</h3><p>In 2&rsquo;s complement representation, positive numbers are represented as themselves while negative numbers are represented by the 2&rsquo;s complement of their positive value. The 2&rsquo;s complement has the advantage that the addition and subtraction are identical to those for unsigned numbers as long as the inputs are represented in the same number of bits.</p></div><footer class=post-footer><nav class=post-nav><a class=prev href=/post/galloping-search/><i class="iconfont icon-left"></i>
+<span class="prev-text nav-default">Galloping Search</span>
+<span class="prev-text nav-mobile">Prev</span>
+</a><a class=next href=/post/the-luhn-formula/><span class="next-text nav-default">The Luhn Formula</span>
 <span class="next-text nav-mobile">Next</span>
-<i class="iconfont icon-right"></i>
-</a>
-</nav>
-</footer>
-</article>
-</div>
-</div>
-</main>
-<footer id=footer class=footer>
-<div class=social-links>
-<a href=https://github.com/MostafaEissa class="iconfont icon-github" title=github></a>
-<a href=https://mostafaeissa.github.io/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a>
-</div>
-<div class=copyright>
-<span class=power-by>
-Powered by <a class=hexo-link href=https://gohugo.io>Hugo</a>
-</span>
-<span class=division>|</span>
-<span class=theme-info>
-Theme -
+<i class="iconfont icon-right"></i></a></nav></footer></article></div></div></main><footer id=footer class=footer><div class=copyright>Disclaimer: The posts on this site are my own and do not represent my employer's view in any way.<div><br><div class=social-links><a href=https://github.com/MostafaEissa class="iconfont icon-github" title=github></a></div><div class=copyright><span class=power-by>Powered by <a class=hexo-link href=https://gohugo.io>Hugo</a>
+</span><span class=division>|</span>
+<span class=theme-info>Theme -
 <a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a>
-</span>
-<span class=copyright-year>
-&copy;
+</span><span class=copyright-year>&copy;
 2019 -
-2021<span class=heart><i class="iconfont icon-heart"></i></span><span>Mostafa Abdelrahman</span>
-</span>
-</div>
-</footer>
-<div class=back-to-top id=back-to-top>
-<i class="iconfont icon-up"></i>
-</div>
-</div>
-<script type=text/javascript src=/lib/jquery/jquery-3.2.1.min.js></script>
-<script type=text/javascript src=/lib/slideout/slideout-1.0.1.min.js></script>
-<script type=text/javascript src=/lib/fancybox/jquery.fancybox-3.1.20.min.js></script>
-<script type=text/javascript src=/js/main.min.b9b83715ef36d47306eef3107cac0706a20908596d09bdbf53f6ac25dc8bd225.js></script>
-</body>
-</html>
+2024<span class=heart><i class="iconfont icon-heart"></i></span><span>Mostafa Abdelrahman</span></span></div></footer><div class=back-to-top id=back-to-top><i class="iconfont icon-up"></i></div></div><script type=text/javascript src=/lib/jquery/jquery-3.2.1.min.js></script><script type=text/javascript src=/lib/slideout/slideout-1.0.1.min.js></script><script type=text/javascript src=/lib/fancybox/jquery.fancybox-3.1.20.min.js></script><script type=text/javascript src=/js/main.min.1821caf6efbc14cf4fb96fdb63c79a3babde5deb1fb600e97b9a2ced5678a2ed.js></script></body></html>

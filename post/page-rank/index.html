@@ -1,222 +1,20 @@
-<!doctype html><html lang=en>
-<head>
-<meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
-<title>Page Rank Algorithm - Beyond Lambda</title>
-<meta name=renderer content="webkit">
-<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
-<meta http-equiv=cache-control content="no-transform">
-<meta http-equiv=cache-control content="no-siteapp">
-<meta name=theme-color content="#f8f5ec">
-<meta name=msapplication-navbutton-color content="#f8f5ec">
-<meta name=apple-mobile-web-app-capable content="yes">
-<meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec">
-<meta name=author content="Mostafa Abdelrahman"><meta name=description content="PageRank is an algorithm used to rank web pages in search engines results. It was named after, one of the founders of Google, Larry Page.
-">
-<meta name=generator content="Hugo 0.89.2 with theme even">
-<link rel=canonical href=https://mostafaeissa.github.io/post/page-rank/>
-<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
-<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
-<link rel=manifest href=/manifest.json>
-<link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5>
-<link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet>
-<link href=/lib/fancybox/jquery.fancybox-3.1.20.min.css rel=stylesheet>
-<meta property="og:title" content="Page Rank Algorithm">
-<meta property="og:description" content="PageRank is an algorithm used to rank web pages in search engines results. It was named after, one of the founders of Google, Larry Page.">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://mostafaeissa.github.io/post/page-rank/"><meta property="article:section" content="post">
-<meta property="article:published_time" content="2020-04-14T00:00:00+00:00">
-<meta property="article:modified_time" content="2020-04-14T00:00:00+00:00">
-<meta itemprop=name content="Page Rank Algorithm">
-<meta itemprop=description content="PageRank is an algorithm used to rank web pages in search engines results. It was named after, one of the founders of Google, Larry Page."><meta itemprop=datePublished content="2020-04-14T00:00:00+00:00">
-<meta itemprop=dateModified content="2020-04-14T00:00:00+00:00">
-<meta itemprop=wordCount content="959">
-<meta itemprop=keywords content><meta name=twitter:card content="summary">
-<meta name=twitter:title content="Page Rank Algorithm">
-<meta name=twitter:description content="PageRank is an algorithm used to rank web pages in search engines results. It was named after, one of the founders of Google, Larry Page."><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
-<script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]-->
-</head>
-<body>
-<div id=mobile-navbar class=mobile-navbar>
-<div class=mobile-header-logo>
-<a href=/ class=logo>Beyond Lambda</a>
-</div>
-<div class=mobile-navbar-icon>
+<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>Page Rank Algorithm - Beyond Lambda</title>
+<meta name=renderer content="webkit"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta http-equiv=Cache-Control content="no-transform"><meta http-equiv=Cache-Control content="no-siteapp"><meta name=theme-color content="#f8f5ec"><meta name=msapplication-navbutton-color content="#f8f5ec"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec"><meta name=author content><meta name=description content="PageRank is an algorithm used to rank web pages in search engines results. It was named after, one of the founders of Google, Larry Page.
+"><meta name=generator content="Hugo 0.129.0 with theme even"><link rel=canonical href=https://mostafaeissa.github.io/post/page-rank/><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/manifest.json><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet><link href=/lib/fancybox/jquery.fancybox-3.1.20.min.css rel=stylesheet><meta property="og:url" content="https://mostafaeissa.github.io/post/page-rank/"><meta property="og:site_name" content="Beyond Lambda"><meta property="og:title" content="Page Rank Algorithm"><meta property="og:description" content="PageRank is an algorithm used to rank web pages in search engines results. It was named after, one of the founders of Google, Larry Page."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2020-04-14T00:00:00+00:00"><meta property="article:modified_time" content="2020-04-14T00:00:00+00:00"><meta itemprop=name content="Page Rank Algorithm"><meta itemprop=description content="PageRank is an algorithm used to rank web pages in search engines results. It was named after, one of the founders of Google, Larry Page."><meta itemprop=datePublished content="2020-04-14T00:00:00+00:00"><meta itemprop=dateModified content="2020-04-14T00:00:00+00:00"><meta itemprop=wordCount content="959"><meta itemprop=keywords content="Machine Learning"><meta name=twitter:card content="summary"><meta name=twitter:title content="Page Rank Algorithm"><meta name=twitter:description content="PageRank is an algorithm used to rank web pages in search engines results. It was named after, one of the founders of Google, Larry Page."><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--></head><body><div id=mobile-navbar class=mobile-navbar><div class=mobile-header-logo><a href=/ class=logo>Beyond Lambda</a></div><div class=mobile-navbar-icon><span></span>
 <span></span>
-<span></span>
-<span></span>
-</div>
-</div>
-<nav id=mobile-menu class="mobile-menu slideout-menu">
-<ul class=mobile-menu-list>
-<a href=/>
-<li class=mobile-menu-item>Home</li>
-</a><a href=/post/>
-<li class=mobile-menu-item>Archives</li>
-</a><a href=/about/>
-<li class=mobile-menu-item>About</li>
-</a>
-</ul>
-</nav>
-<div class=container id=mobile-panel>
-<header id=header class=header>
-<div class=logo-wrapper>
-<a href=/ class=logo>Beyond Lambda</a>
-</div>
-<nav class=site-navbar>
-<ul id=menu class=menu>
-<li class=menu-item>
-<a class=menu-item-link href=/>Home</a>
-</li><li class=menu-item>
-<a class=menu-item-link href=/post/>Archives</a>
-</li><li class=menu-item>
-<a class=menu-item-link href=/about/>About</a>
-</li>
-</ul>
-</nav>
-</header>
-<main id=main class=main>
-<div class=content-wrapper>
-<div id=content class=content>
-<article class=post>
-<header class=post-header>
-<h1 class=post-title>Page Rank Algorithm</h1>
-<div class=post-meta>
-<span class=post-time> 2020-04-14 </span>
-<div class=post-category>
-<a href=/categories/machine-learning/> Machine Learning </a>
-</div>
-<span class=more-meta> 959 words </span>
-<span class=more-meta> 5 mins read </span>
-</div>
-</header>
-<div class=post-toc id=post-toc>
-<h2 class=post-toc-title>Contents</h2>
-<div class="post-toc-content always-active">
-<nav id=TableOfContents>
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href=#introduction>Introduction</a></li>
-<li><a href=#the-random-surfer-model>The Random Surfer Model</a></li>
-<li><a href=#worked-example>Worked Example</a></li>
-<li><a href=#matrix-representation>Matrix Representation</a></li>
-<li><a href=#python-implementation>Python Implementation</a></li>
-<li><a href=#conclusion>Conclusion</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</nav>
-</div>
-</div>
-<div class=post-content>
-<p>PageRank is an algorithm used to rank web pages in search engines results. It was named after, one of the founders of Google, Larry Page.</p>
-<h3 id=introduction>Introduction</h3>
-<p>PageRank is an algorithm used to rank web pages that relies on two ideas:</p>
-<ol>
-<li>counting the number of in-links a page has where the more in-links the higher the rank.</li>
-<li>In-links from pages having a high rank should be worth more than in-links from pages having a low rank.</li>
-</ol>
-<p>This definition seems recursive because if a page A is linked to by three other pages B,C,D then in order to determine the PageRank of page A we need to also know the PageRank of B,C,D. As such, each page distributes its PageRank score equally on its out-links, the more out-links a page has, the less the share of each link. In our earlier example, the PageRank $PR(A) = \frac{PR(B)}{L(B)}+\frac{PR(C)}{L(C)}+\frac{PR(D)}{L(D)}$ where $L(x)$ is the number of out links from page $x$.</p>
-<p>More generally, we can express page rank as :</p>
-<p>$$PR(p) = \sum \limits_{q \in In(p)} \frac{PR(q)}{L(q)}$$</p>
-<p>where $In(p)$ is the set of in-links to page $p$.</p>
-<p>We can think of the problem as a surfer who follows the links randomly from a given page. However, the problem with this definition is that some pages do not have any out-links (a sink page) which can make our algorithm get stuck and that is why we need a better model.</p>
-<h3 id=the-random-surfer-model>The Random Surfer Model</h3>
-<p>Similar to how most people surf the web, on a given web page you choose to follow one of the links on the links on the page. If you reach a page without any links (a sink page) then you simply randomly restart on a new page on the web Furthermore, every once in a while, you get bored of following the link and you decide to jump to a totally new page.</p>
-<p>In mathematical notation, let $c$ be the probability that the surfer will continue following the links while $(1-c)$ is the probability that the surfer will get bored and jump to a random page. A good value for $c = 0.85.$ This time PageRank score is a combination of the contribution of PageRank scores of the in-links and the contribution of randomly landing on this page when the surfer is bored.</p>
-<p>$$
+<span></span></div></div><nav id=mobile-menu class="mobile-menu slideout-menu"><ul class=mobile-menu-list><a href=/><li class=mobile-menu-item>Home</li></a><a href=/post/><li class=mobile-menu-item>Archives</li></a><a href=/about/><li class=mobile-menu-item>About</li></a></ul></nav><div class=container id=mobile-panel><header id=header class=header><div class=logo-wrapper><a href=/ class=logo>Beyond Lambda</a></div><nav class=site-navbar><ul id=menu class=menu><li class=menu-item><a class=menu-item-link href=/>Home</a></li><li class=menu-item><a class=menu-item-link href=/post/>Archives</a></li><li class=menu-item><a class=menu-item-link href=/about/>About</a></li></ul></nav></header><main id=main class=main><div class=content-wrapper><div id=content class=content><article class=post><header class=post-header><h1 class=post-title>Page Rank Algorithm</h1><div class=post-meta><span class=post-time>2020-04-14</span><div class=post-category><a href=/categories/machine-learning/>Machine Learning</a></div><span class=more-meta>959 words </span><span class=more-meta>5 mins read</span></div></header><div class=post-toc id=post-toc><h2 class=post-toc-title>Contents</h2><div class="post-toc-content always-active"><nav id=TableOfContents><ul><li><ul><li><ul><li><a href=#introduction>Introduction</a></li><li><a href=#the-random-surfer-model>The Random Surfer Model</a></li><li><a href=#worked-example>Worked Example</a></li><li><a href=#matrix-representation>Matrix Representation</a></li><li><a href=#python-implementation>Python Implementation</a></li><li><a href=#conclusion>Conclusion</a></li></ul></li></ul></li></ul></nav></div></div><div class=post-content><p>PageRank is an algorithm used to rank web pages in search engines results. It was named after, one of the founders of Google, Larry Page.</p><h3 id=introduction>Introduction</h3><p>PageRank is an algorithm used to rank web pages that relies on two ideas:</p><ol><li>counting the number of in-links a page has where the more in-links the higher the rank.</li><li>In-links from pages having a high rank should be worth more than in-links from pages having a low rank.</li></ol><p>This definition seems recursive because if a page A is linked to by three other pages B,C,D then in order to determine the PageRank of page A we need to also know the PageRank of B,C,D. As such, each page distributes its PageRank score equally on its out-links, the more out-links a page has, the less the share of each link. In our earlier example, the PageRank $PR(A) = \frac{PR(B)}{L(B)}+\frac{PR(C)}{L(C)}+\frac{PR(D)}{L(D)}$ where $L(x)$ is the number of out links from page $x$.</p><p>More generally, we can express page rank as :</p><p>$$PR(p) = \sum \limits_{q \in In(p)} \frac{PR(q)}{L(q)}$$</p><p>where $In(p)$ is the set of in-links to page $p$.</p><p>We can think of the problem as a surfer who follows the links randomly from a given page. However, the problem with this definition is that some pages do not have any out-links (a sink page) which can make our algorithm get stuck and that is why we need a better model.</p><h3 id=the-random-surfer-model>The Random Surfer Model</h3><p>Similar to how most people surf the web, on a given web page you choose to follow one of the links on the links on the page. If you reach a page without any links (a sink page) then you simply randomly restart on a new page on the web Furthermore, every once in a while, you get bored of following the link and you decide to jump to a totally new page.</p><p>In mathematical notation, let $c$ be the probability that the surfer will continue following the links while $(1-c)$ is the probability that the surfer will get bored and jump to a random page. A good value for $c = 0.85.$ This time PageRank score is a combination of the contribution of PageRank scores of the in-links and the contribution of randomly landing on this page when the surfer is bored.</p><p>$$
 \begin{equation}
 \label{page rank}
 PR(p) = c \times \sum \limits_{q \in In(p)} \frac{PR(q)}{L(q)} + (1-c) \times \frac{1}{N}
 \end{equation}
-$$</p>
-<p>We can think of the PageRank score $PR(p)$ of a page $p$ as the probability that a random surfer will be at page $p$ at a given point in time. In this interpretation, the PageRank score will be between 0 and 1 and since the surfer has to be on some page at any given time and the sum of the PageRank scores of all the pages sums to 1.</p>
-<p>The Algorithm is as follows:</p>
-<ol>
-<li>Assign each node an initial page rank</li>
-<li>repeat until convergence: calculate the page rank of each node using equation $\eqref{page rank}$</li>
-</ol>
-<h3 id=worked-example>Worked Example</h3>
-<p>Consider <a href=https://www.cs.princeton.edu/~chazelle/courses/BIB/pagerank.htm>this example</a>, where we have four web pages pointing to each other as shown in the figure below. Intuitively, Page C has 3 in-links so it should have the highest PageRank and page D should be last because it does not have any in-links.</p>
-<div class=align-center>
-<p><img src=/images/page-rank/example.png alt="page rank example"></p>
-</div>
-<p>We can write the PageRank score of each page as follows:</p>
-<p>$$
+$$</p><p>We can think of the PageRank score $PR(p)$ of a page $p$ as the probability that a random surfer will be at page $p$ at a given point in time. In this interpretation, the PageRank score will be between 0 and 1 and since the surfer has to be on some page at any given time and the sum of the PageRank scores of all the pages sums to 1.</p><p>The Algorithm is as follows:</p><ol><li>Assign each node an initial page rank</li><li>repeat until convergence: calculate the page rank of each node using equation $\eqref{page rank}$</li></ol><h3 id=worked-example>Worked Example</h3><p>Consider <a href=https://www.cs.princeton.edu/~chazelle/courses/BIB/pagerank.htm>this example</a>, where we have four web pages pointing to each other as shown in the figure below. Intuitively, Page C has 3 in-links so it should have the highest PageRank and page D should be last because it does not have any in-links.</p><div class=align-center><p><img src=/images/page-rank/example.png alt="page rank example"></p></div><p>We can write the PageRank score of each page as follows:</p><p>$$
 \begin{aligned}
 PR(A) &= c \times \frac{PR(C)}{1} +\frac{(1-c)}{4} \newline
 PR(B) &= c \times \frac{PR(A)}{3} + \frac{(1-c)}{4} \newline
 PR(C) &= c \times \left(\frac{PR(A)}{3} + \frac{PR(B)}{1} + \frac{PR(D)}{1} \right) + \frac{(1-c)}{4} \newline
 PR(D) &= c \times \frac{PR(A)}{3} + \frac{(1-c)}{4} \newline
 \end{aligned}
-$$</p>
-<h3 id=matrix-representation>Matrix Representation</h3>
-<p>To make solving the above equations easier we can write them in matrix format. We will not go into all the mathematical details but we can write the equation as the sum of two matrices, the first matrix is very similar to the adjacency matrix of the original graph while the second matrix is just a constant matrix.</p>
-<p>$$\begin{bmatrix} PR(A) & PR(B) & PR(C) & PR(D) \end{bmatrix} = \left(c \times \begin{bmatrix} 0 & 0.5 & 0 & 0 \newline 0 & 0 & 1 & 0 \newline 1 & 0 & 0 & 0 \newline 0 & 1 & 0 & 0 \end{bmatrix} + \frac{(1-c)}{4} \times \begin{bmatrix} 1 & 1 & 1 & 1 \newline 1 & 1 & 1 & 1 \newline 1 & 1 & 1 & 1 \newline 1 & 1 & 1 & 1 \end{bmatrix} \right) $$</p>
-<p>We can then use <a href=https://en.wikipedia.org/wiki/Power_iteration>Power Iteration method</a> to solve this problem Let $c = 0.85$ and suppose we initialize</p>
-<p>$$ \begin{bmatrix} PR(A) & PR(B) & PR(C) & PR(D) \end{bmatrix} = \begin{bmatrix} 1.0 & 0 & 0 & 0 \end{bmatrix} $$</p>
-<table>
-<thead>
-<tr>
-<th style=text-align:center>Page</th>
-<th style=text-align:center>Iteration 1</th>
-<th style=text-align:center>Iteration 2</th>
-<th style=text-align:center>Iteration 3</th>
-<th style=text-align:center>Iteration 4</th>
-<th style=text-align:center>…</th>
-<th style=text-align:center>Iteration 12</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style=text-align:center>Page A</td>
-<td style=text-align:center>1.0</td>
-<td style=text-align:center>0.0375</td>
-<td style=text-align:center>0.4306250</td>
-<td style=text-align:center>0.41707812</td>
-<td style=text-align:center></td>
-<td style=text-align:center>0.36124157</td>
-</tr>
-<tr>
-<td style=text-align:center>Page B</td>
-<td style=text-align:center>0.0</td>
-<td style=text-align:center>0.4625</td>
-<td style=text-align:center>0.0853125</td>
-<td style=text-align:center>0.25239062</td>
-<td style=text-align:center></td>
-<td style=text-align:center>0.22300072</td>
-</tr>
-<tr>
-<td style=text-align:center>Page C</td>
-<td style=text-align:center>0.0</td>
-<td style=text-align:center>0.4625</td>
-<td style=text-align:center>0.4465625</td>
-<td style=text-align:center>0.29303125</td>
-<td style=text-align:center></td>
-<td style=text-align:center>0.37825770</td>
-</tr>
-<tr>
-<td style=text-align:center>Page D</td>
-<td style=text-align:center>0.0</td>
-<td style=text-align:center>0.0375</td>
-<td style=text-align:center>0.0375000</td>
-<td style=text-align:center>0.03750000</td>
-<td style=text-align:center></td>
-<td style=text-align:center>0.03750000</td>
-</tr>
-</tbody>
-</table>
-<h3 id=python-implementation>Python Implementation</h3>
-<p>We can easily implement the iterations of power method in a couple of lines of python.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+$$</p><h3 id=matrix-representation>Matrix Representation</h3><p>To make solving the above equations easier we can write them in matrix format. We will not go into all the mathematical details but we can write the equation as the sum of two matrices, the first matrix is very similar to the adjacency matrix of the original graph while the second matrix is just a constant matrix.</p><p>$$\begin{bmatrix} PR(A) & PR(B) & PR(C) & PR(D) \end{bmatrix} = \left(c \times \begin{bmatrix} 0 & 0.5 & 0 & 0 \newline 0 & 0 & 1 & 0 \newline 1 & 0 & 0 & 0 \newline 0 & 1 & 0 & 0 \end{bmatrix} + \frac{(1-c)}{4} \times \begin{bmatrix} 1 & 1 & 1 & 1 \newline 1 & 1 & 1 & 1 \newline 1 & 1 & 1 & 1 \newline 1 & 1 & 1 & 1 \end{bmatrix} \right) $$</p><p>We can then use <a href=https://en.wikipedia.org/wiki/Power_iteration>Power Iteration method</a> to solve this problem Let $c = 0.85$ and suppose we initialize</p><p>$$ \begin{bmatrix} PR(A) & PR(B) & PR(C) & PR(D) \end{bmatrix} = \begin{bmatrix} 1.0 & 0 & 0 & 0 \end{bmatrix} $$</p><table><thead><tr><th style=text-align:center>Page</th><th style=text-align:center>Iteration 1</th><th style=text-align:center>Iteration 2</th><th style=text-align:center>Iteration 3</th><th style=text-align:center>Iteration 4</th><th style=text-align:center>…</th><th style=text-align:center>Iteration 12</th></tr></thead><tbody><tr><td style=text-align:center>Page A</td><td style=text-align:center>1.0</td><td style=text-align:center>0.0375</td><td style=text-align:center>0.4306250</td><td style=text-align:center>0.41707812</td><td style=text-align:center></td><td style=text-align:center>0.36124157</td></tr><tr><td style=text-align:center>Page B</td><td style=text-align:center>0.0</td><td style=text-align:center>0.4625</td><td style=text-align:center>0.0853125</td><td style=text-align:center>0.25239062</td><td style=text-align:center></td><td style=text-align:center>0.22300072</td></tr><tr><td style=text-align:center>Page C</td><td style=text-align:center>0.0</td><td style=text-align:center>0.4625</td><td style=text-align:center>0.4465625</td><td style=text-align:center>0.29303125</td><td style=text-align:center></td><td style=text-align:center>0.37825770</td></tr><tr><td style=text-align:center>Page D</td><td style=text-align:center>0.0</td><td style=text-align:center>0.0375</td><td style=text-align:center>0.0375000</td><td style=text-align:center>0.03750000</td><td style=text-align:center></td><td style=text-align:center>0.03750000</td></tr></tbody></table><h3 id=python-implementation>Python Implementation</h3><p>We can easily implement the iterations of power method in a couple of lines of python.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -237,82 +35,36 @@ $$</p>
 </span><span class=lnt>19
 </span><span class=lnt>20
 </span><span class=lnt>21
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=kn>import</span> <span class=nn>numpy</span> <span class=k>as</span> <span class=nn>np</span>
-
-<span class=k>def</span> <span class=nf>page_rank</span><span class=p>(</span><span class=n>adj_matrix</span><span class=p>):</span>
-    <span class=c1># parameters</span>
-    <span class=n>num_pages</span> <span class=o>=</span> <span class=n>adj_matrix</span><span class=o>.</span><span class=n>shape</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span>
-    <span class=n>c</span> <span class=o>=</span> <span class=mf>0.85</span>
-    <span class=n>uniform_prob</span> <span class=o>=</span> <span class=mf>1.0</span><span class=o>/</span><span class=n>num_pages</span>
-    <span class=n>epsilon</span> <span class=o>=</span> <span class=mf>1e-5</span>
-    
-    <span class=c1># transition probability</span>
-    <span class=n>transition_matrix</span> <span class=o>=</span> <span class=n>c</span> <span class=o>*</span> <span class=n>adj_matrix</span>  <span class=o>+</span> <span class=p>(</span><span class=mi>1</span><span class=o>-</span><span class=n>c</span><span class=p>)</span> <span class=o>*</span> <span class=n>np</span><span class=o>.</span><span class=n>full</span><span class=p>((</span><span class=n>num_pages</span><span class=p>,</span> <span class=n>num_pages</span><span class=p>),</span> <span class=n>uniform_prob</span><span class=p>)</span>
-    
-    <span class=c1># initialize page rank</span>
-    <span class=n>pr</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>full</span><span class=p>((</span><span class=mi>1</span><span class=p>,</span> <span class=n>num_pages</span><span class=p>),</span> <span class=n>uniform_prob</span><span class=p>)</span>
-    
-    <span class=n>pr_new</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>matmul</span><span class=p>(</span><span class=n>pr</span><span class=p>,</span> <span class=n>transition_matrix</span><span class=p>)</span>
-    <span class=k>while</span> <span class=n>np</span><span class=o>.</span><span class=n>sum</span><span class=p>((</span><span class=n>pr_new</span> <span class=o>-</span> <span class=n>pr</span><span class=p>)</span><span class=o>**</span><span class=mi>2</span><span class=p>)</span> <span class=o>&gt;</span> <span class=n>epsilon</span><span class=p>:</span>
-        <span class=n>pr</span> <span class=o>=</span> <span class=n>pr_new</span>
-        <span class=n>pr_new</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>matmul</span><span class=p>(</span><span class=n>pr</span><span class=p>,</span> <span class=n>transition_matrix</span><span class=p>)</span>
-    
-    <span class=k>return</span> <span class=n>pr</span>
-</code></pre></td></tr></table>
-</div>
-</div><h3 id=conclusion>Conclusion</h3>
-<p>In this post, we described the PageRank algorithm. We then described the random surfer model and the interpreting PageRank as a probability. Later we described the algorithm steps and discussed how to use power iteration to solve the recursive equations.</p>
-</div>
-<footer class=post-footer>
-<nav class=post-nav>
-<a class=prev href=/post/but-i-dont-have-enough-time/>
-<i class="iconfont icon-left"></i>
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>numpy</span> <span class=k>as</span> <span class=nn>np</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>page_rank</span><span class=p>(</span><span class=n>adj_matrix</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=c1># parameters</span>
+</span></span><span class=line><span class=cl>    <span class=n>num_pages</span> <span class=o>=</span> <span class=n>adj_matrix</span><span class=o>.</span><span class=n>shape</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=n>c</span> <span class=o>=</span> <span class=mf>0.85</span>
+</span></span><span class=line><span class=cl>    <span class=n>uniform_prob</span> <span class=o>=</span> <span class=mf>1.0</span><span class=o>/</span><span class=n>num_pages</span>
+</span></span><span class=line><span class=cl>    <span class=n>epsilon</span> <span class=o>=</span> <span class=mf>1e-5</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1># transition probability</span>
+</span></span><span class=line><span class=cl>    <span class=n>transition_matrix</span> <span class=o>=</span> <span class=n>c</span> <span class=o>*</span> <span class=n>adj_matrix</span>  <span class=o>+</span> <span class=p>(</span><span class=mi>1</span><span class=o>-</span><span class=n>c</span><span class=p>)</span> <span class=o>*</span> <span class=n>np</span><span class=o>.</span><span class=n>full</span><span class=p>((</span><span class=n>num_pages</span><span class=p>,</span> <span class=n>num_pages</span><span class=p>),</span> <span class=n>uniform_prob</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1># initialize page rank</span>
+</span></span><span class=line><span class=cl>    <span class=n>pr</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>full</span><span class=p>((</span><span class=mi>1</span><span class=p>,</span> <span class=n>num_pages</span><span class=p>),</span> <span class=n>uniform_prob</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=n>pr_new</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>matmul</span><span class=p>(</span><span class=n>pr</span><span class=p>,</span> <span class=n>transition_matrix</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>while</span> <span class=n>np</span><span class=o>.</span><span class=n>sum</span><span class=p>((</span><span class=n>pr_new</span> <span class=o>-</span> <span class=n>pr</span><span class=p>)</span><span class=o>**</span><span class=mi>2</span><span class=p>)</span> <span class=o>&gt;</span> <span class=n>epsilon</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>pr</span> <span class=o>=</span> <span class=n>pr_new</span>
+</span></span><span class=line><span class=cl>        <span class=n>pr_new</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>matmul</span><span class=p>(</span><span class=n>pr</span><span class=p>,</span> <span class=n>transition_matrix</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>pr</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=conclusion>Conclusion</h3><p>In this post, we described the PageRank algorithm. We then described the random surfer model and the interpreting PageRank as a probability. Later we described the algorithm steps and discussed how to use power iteration to solve the recursive equations.</p></div><footer class=post-footer><nav class=post-nav><a class=prev href=/post/but-i-dont-have-enough-time/><i class="iconfont icon-left"></i>
 <span class="prev-text nav-default">Time Management and Priorities</span>
 <span class="prev-text nav-mobile">Prev</span>
-</a>
-<a class=next href=/post/value-rigidity/>
-<span class="next-text nav-default">Value Rigidity</span>
+</a><a class=next href=/post/value-rigidity/><span class="next-text nav-default">Value Rigidity</span>
 <span class="next-text nav-mobile">Next</span>
-<i class="iconfont icon-right"></i>
-</a>
-</nav>
-</footer>
-</article>
-</div>
-</div>
-</main>
-<footer id=footer class=footer>
-<div class=social-links>
-<a href=https://github.com/MostafaEissa class="iconfont icon-github" title=github></a>
-<a href=https://mostafaeissa.github.io/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a>
-</div>
-<div class=copyright>
-<span class=power-by>
-Powered by <a class=hexo-link href=https://gohugo.io>Hugo</a>
-</span>
-<span class=division>|</span>
-<span class=theme-info>
-Theme -
+<i class="iconfont icon-right"></i></a></nav></footer></article></div></div></main><footer id=footer class=footer><div class=copyright>Disclaimer: The posts on this site are my own and do not represent my employer's view in any way.<div><br><div class=social-links><a href=https://github.com/MostafaEissa class="iconfont icon-github" title=github></a></div><div class=copyright><span class=power-by>Powered by <a class=hexo-link href=https://gohugo.io>Hugo</a>
+</span><span class=division>|</span>
+<span class=theme-info>Theme -
 <a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a>
-</span>
-<span class=copyright-year>
-&copy;
+</span><span class=copyright-year>&copy;
 2019 -
-2021<span class=heart><i class="iconfont icon-heart"></i></span><span>Mostafa Abdelrahman</span>
-</span>
-</div>
-</footer>
-<div class=back-to-top id=back-to-top>
-<i class="iconfont icon-up"></i>
-</div>
-</div>
-<script type=text/javascript src=/lib/jquery/jquery-3.2.1.min.js></script>
-<script type=text/javascript src=/lib/slideout/slideout-1.0.1.min.js></script>
-<script type=text/javascript src=/lib/fancybox/jquery.fancybox-3.1.20.min.js></script>
-<script type=text/javascript src=/js/main.min.b9b83715ef36d47306eef3107cac0706a20908596d09bdbf53f6ac25dc8bd225.js></script>
-<script type=text/javascript>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],tags:'ams'}}</script>
-<script async src=https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin=anonymous></script>
-</body>
-</html>
+2024<span class=heart><i class="iconfont icon-heart"></i></span><span>Mostafa Abdelrahman</span></span></div></footer><div class=back-to-top id=back-to-top><i class="iconfont icon-up"></i></div></div><script type=text/javascript src=/lib/jquery/jquery-3.2.1.min.js></script><script type=text/javascript src=/lib/slideout/slideout-1.0.1.min.js></script><script type=text/javascript src=/lib/fancybox/jquery.fancybox-3.1.20.min.js></script><script type=text/javascript src=/js/main.min.1821caf6efbc14cf4fb96fdb63c79a3babde5deb1fb600e97b9a2ced5678a2ed.js></script><script type=text/javascript>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],tags:"ams"}}</script><script async src=https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin=anonymous></script></body></html>
