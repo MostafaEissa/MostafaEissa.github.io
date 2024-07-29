@@ -1,121 +1,37 @@
-baseURL = "https://mostafaeissa.github.io"
-languageCode = "en-us"
-defaultContentLanguage = "en"
+baseurl = "https://mostafaeissa.github.io"
 title = "Beyond Lambda"
-preserveTaxonomyNames = true
-enableEmoji = true
-theme = "even"
-enableGitInfo = false # use git commit log to generate lastmod record
-
-# Syntax highlighting by Chroma. NOTE: Don't enable `highlightInClient` and `chroma` at the same time!
-pygmentsOptions = "linenos=table"
-pygmentsCodefences = true
-pygmentsUseClasses = true
-pygmentsCodefencesGuessSyntax = true
-
+languageCode = "en-us"
 paginate = 10
-
-[params.author]
-  name = "Mostafa Abdelrahman"
-
-[sitemap]
-  changefreq = "weekly"
-  priority = 0.5
-  filename = "sitemap.xml"
-
-[[menu.main]]
-  name = "Home"
-  weight = 10
-  identifier = "home"
-  url = "/"
-[[menu.main]]
-  name = "Archives"
-  weight = 20
-  identifier = "archives"
-  url = "/post/"
-[[menu.main]]
-  name = "About"
-  weight = 40
-  identifier = "About"
-  url = "/about/"
+paginatePath = "page"
+theme = "humin"
+mathjax = true
+mathjaxEnableSingleDollar = true
 
 [params]
-  version = "4.x"           # Used to give a friendly message when you have an incompatible update
-  debug = false             # If true, load `eruda.min.js`. See https://github.com/liriliri/eruda
+description = ""
+keywords = []
+author = "Mostafa Abdelrahman"
+profilePicture = "/android-chrome-512x512.png"
 
-  since = "2019"            # Site creation time
- 
-  # paginate of archives, tags and categories 
-  archivePaginate = 50
+[taxonomies]
+tag = "tags"
+topic = "topics"
+	
 
-  # show 'xx Posts In Total' in archive page ?
-  showArchiveCount = false
+[[params.static_pages]]
+url = "/about/"
+tag = "about"
 
-  # The date format to use; for a list of valid formats, see https://gohugo.io/functions/format/
-  dateFormatToUse = "2006-01-02"
+[[params.social]]
+url = "https://github.com/MostafaEissa"
+fa_icon = "fa-github"
 
-  # show word count and read time ?
-  moreMeta = true
+[[params.social]]
+url = "https://linkedin.com/in/mostafa-abdelrahman-16356b12a"
+fa_icon = "fa-linkedin-square"
 
-  # Syntax highlighting by highlight.js
-  highlightInClient = false
+[[params.social]]
+url = "/index.xml"
+fa_icon = "fa-rss"
 
-  # front matter
-  # Some global options, you can also close or open something in front matter for a single post, see more information from `archetypes/default.md`.
-  toc = false
-  autoCollapseToc = false   # Auto expand and collapse toc 
-  fancybox = true           # see https://github.com/fancyapps/fancybox
-
-  # mathjax
-  mathjax = false           # see https://www.mathjax.org/
-  mathjaxEnableSingleDollar = false 
-  mathjaxEnableAutoNumber = false
-  mathjaxUseLocalFiles = false  # You should install mathjax in `your-site/static/lib/mathjax`
-
-  postMetaInFooter = false   # contain author, lastMod, markdown link, license
-  linkToMarkDown = false    # Only effective when hugo will output .md files.
-  contentCopyright = ''     # e.g. '<a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a>'
-
-  # Link custom CSS and JS assets
-  #   (relative to /static/css and /static/js respectively)
-  customCSS = []
-  customJS = []
-
-  uglyURLs = false          # please keep same with uglyurls setting
-
-  # Show language selector for multilingual site.
-  showLanguageSelector = false
-
-  [params.social] 
-    g-github = "https://github.com/MostafaEissa"
-
-# See https://gohugo.io/about/hugo-and-gdpr/
-[privacy]
-  [privacy.disqus]
-    disable = true
-
-  [privacy.googleAnalytics]
-    disable = true
-
-  [privacy.instagram]
-    disable = true
-
-  [privacy.twitter]
-    disable = true
-
-  [privacy.vimeo]
-    disable = true
-
-  [privacy.youtube]
-    disable = true
-
-# see https://gohugo.io/getting-started/configuration-markup
-[markup]
-  [markup.tableOfContents]
-    startLevel = 1
-  [markup.goldmark.renderer]
-    unsafe = true
-
-[outputs]
- section = ["HTML", "RSS"]
 
