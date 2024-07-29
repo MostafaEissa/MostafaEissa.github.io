@@ -1,0 +1,64 @@
+baseurl = "https://www.ritchievink.com/"
+relativeURLs = true
+title = "Ritchie Vink"
+copyright = "(c) 2017 Ritchie Vink."
+languageCode = "en-EN"
+metaDataFormat = "yaml"
+theme = "hucore"
+paginate = 10
+paginatePath = "page"
+
+disqusShortname = "www-ritchievink-com"
+
+[permalinks]
+    post = "/blog/:year/:month/:day/:slug/"
+    code = "/:slug/"
+
+[taxonomies]
+    tag = "tags"
+    topic = "topics"
+
+[author]
+    name = "Ritchie Vink"
+    email = "ritchie46@gmail.com"
+
+[params]
+author = "Ritchie Vink"
+googleAnalytics = "#######"
+sharingicons = true
+keywords = ["keyword 1", "keyword 2", "keyword 3"]
+
+[params.highlight]
+style = "github"
+languages = ["scala", "python"]
+
+
+[[params.social]]
+url = "https://github.com/ritchie46"
+fa_icon = "fa-github"
+
+
+[[params.social]]
+url = "https://linkedin.com/in/ritchievink/"
+fa_icon = "fa-linkedin-square"
+
+[[params.social]]
+url = "/index.xml"
+fa_icon = "fa-rss"
+
+[[params.socialshare]]
+url = "https://linkedin.com/in/ritchievink"
+fa_icon = "fa-linkedin-square"
+
+[[params.static_pages]]
+url = "/about/"
+tag = "about"
+
+[[params.static_pages]]
+url = "/anastruct/"
+tag = "anastruct"
+
+[[params.static_pages]]
+url = "/mnkappa/"
+tag = "m-n-kappa"
+

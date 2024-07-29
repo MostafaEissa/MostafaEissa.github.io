@@ -1,0 +1,34 @@
+<section class="section">
+  <div class="container">
+    <nav class="nav">
+
+ <img src="{{ $.Site.Params.profilePicture }}" alt="Avatar" style="margin-right: 1em" height="100px"> 
+      <div class="nav-left" style="flex-basis: auto;">
+
+        <a class="nav-item" href="{{ .Site.BaseURL }}"><h1 class="title is-4">{{ .Site.Title }}</h1></a>
+      <nav class="nav-item level is-mobile">
+          <a class="level-item" href="/tags">
+            tags
+          </a>
+          <!-- the static pages from config.tml-->
+          {{ range .Site.Params.static_pages }}
+          <a class="level-item" href="{{ .url | absURL }}">
+            {{ .tag }}
+          </a>
+          {{ end }}
+        </nav>
+      </div>
+      <div class="nav-right">
+        <nav class="nav-item level is-mobile">
+          {{ range .Site.Params.social }}
+          <a class="level-item" href="{{ .url | absURL }}" target="_blank">
+            <span class="icon">
+              <i class="fa {{ .fa_icon }}"></i>
+            </span>
+          </a>
+          {{ end }}
+        </nav>
+      </div>
+    </nav>
+  </div>
+</section>

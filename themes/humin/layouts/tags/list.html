@@ -1,0 +1,17 @@
+{{ partial "header" . }}
+{{ partial "nav" . }}
+
+<section class="section">
+
+    <div class="container">
+        <h1 class="title">Tag: {{ .Data.Term }}</h1>
+        <ul>
+        {{ range sort .Pages }}
+            <li><a href="{{ .Permalink }}">{{ .Title }}</a>{{ if .Draft }} ::Draft{{ end }}
+                <span style="float:right; padding-right: 5em;">{{ .Date.Format "02-01-2006" }} </span>
+            </li>
+        {{ end }}
+        </ul>
+    </div>
+</section>
+{{ partial "footer" . }}
