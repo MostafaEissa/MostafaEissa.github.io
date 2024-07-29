@@ -1,6 +1,6 @@
 ---
 title: "The Luhn Formula"
-categories: [Algorithm, Programming]
+tags: [Algorithm, Programming]
 date: 2021-11-01
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: "Galloping Search"
 date: 2024-07-26
-categories: [Information Retrieval, Algorithms]
+tags: [Information Retrieval, Algorithms]
 mathjax: true
 mathjaxEnableSingleDollar: true
 ---

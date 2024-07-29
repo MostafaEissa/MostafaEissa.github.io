@@ -1,6 +1,6 @@
 ---
 title: "Value Rigidity"
-categories: [Personal Development]
+tags: [Personal Development]
 date: 2020-03-18
 ---
 I was reading a book called [The Passionate Programmer](https://www.amazon.com/Passionate-Programmer-Remarkable-Development-Pragmatic/dp/1934356344)  by Chad Fowler. The books talks about what it takes to create a remarkable career in software development. It is a very good read and if you haven't read it yet I suggest you check it out. In this post I will try to one particular story that resonated with me.

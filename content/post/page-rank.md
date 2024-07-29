@@ -1,7 +1,7 @@
 ---
 title: "Page Rank Algorithm"
 date: 2020-04-14
-categories: [Machine Learning]
+tags: [Machine Learning]
 mathjax: true
 mathjaxEnableSingleDollar: true
 mathjaxEnableAutoNumber: true

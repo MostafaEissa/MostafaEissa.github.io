@@ -1,7 +1,7 @@
 ---
 title: "The Perceptron"
 date: 2020-02-26
-categories: [Machine Learning]
+tags: [Machine Learning]
 mathjax: true
 mathjaxEnableSingleDollar: true
 toc: true

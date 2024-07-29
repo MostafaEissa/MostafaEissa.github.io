@@ -1,7 +1,7 @@
 ---
 title: "Binary Representation of Negative Numbers"
 date: "2021-11-14"
-categories: [Programming]
+tags: [Programming]
 ---
 Many of you already know that to in computer systems, to represent the negative numbers we use what is known as 2’s complement. In this article I will try to explain where it came from.
 

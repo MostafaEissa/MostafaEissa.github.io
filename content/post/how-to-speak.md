@@ -1,6 +1,6 @@
 ---
 title: "How to Speak"
-categories: [Personal Development]
+tags: [Personal Development]
 date: 2020-06-04
 ---
 These are my notes for the lecture [How To Speak by Patrick Winston](https://www.youtube.com/watch?v=Unzc731iCUY). I suggest you check it out if you have the time.

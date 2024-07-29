@@ -1,6 +1,6 @@
 ---
 title: 2048
-categories: [Programming]
+tags: [Programming]
 date: 2020-05-13
 ---
 In this post we will try to implement the game 2048 as a console app in python!

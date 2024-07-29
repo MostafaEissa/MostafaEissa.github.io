@@ -1,7 +1,7 @@
 ---
 title: "The Naive Bayes Assumtion"
 date: 2020-03-11
-categories: [Machine Learning]
+tags: [Machine Learning]
 mathjax: true
 mathjaxEnableSingleDollar: true
 mathjaxEnableAutoNumber: true

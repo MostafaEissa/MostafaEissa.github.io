@@ -1,7 +1,7 @@
 ---
 title: "K-means clustering"
 date: 2021-10-18
-categories: [Machine Learning]
+tags: [Machine Learning]
 mathjax: true
 mathjaxEnableSingleDollar: true
 toc: true

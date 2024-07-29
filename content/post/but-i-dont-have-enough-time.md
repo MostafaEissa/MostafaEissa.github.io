@@ -1,6 +1,6 @@
 ---
 title: "Time Management and Priorities"
-categories: [Personal Development]
+tags: [Personal Development]
 date: 2020-04-29
 ---
 > **Life is only days, so if your day passes, your life becomes shorter.**
