@@ -1,0 +1,42 @@
+<!doctype html><html lang=en-us><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta content name=keywords><meta content="Mostafa Abdelrahman" name=author><meta property="og:title" content="RMSE Assumptions - Beyond Lambda"><meta property="og:url" content="https://mostafaeissa.github.io/post/rmse-assumption/"><meta property="og:description" content><meta property="og:type" content="website"><title>RMSE Assumptions | Beyond Lambda</title>
+<link rel=stylesheet href=https://mostafaeissa.github.io//css/style.css><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin=anonymous><link rel=stylesheet href=//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/default.min.css><script type=text/javascript>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]]}}</script><script async src=https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin=anonymous></script></head><body><section class=section><div class=container><nav class=nav><img src=/android-chrome-512x512.png alt=Avatar style=margin-right:1em height=100px><div class=nav-left style=flex-basis:auto><a class=nav-item href=https://mostafaeissa.github.io/><h1 class="title is-4">Beyond Lambda</h1></a><nav class="nav-item level is-mobile"><a class=level-item href=/tags>tags
+</a><a class=level-item href=https://mostafaeissa.github.io/about/>about</a></nav></div><div class=nav-right><nav class="nav-item level is-mobile"><a class=level-item href=https://github.com/MostafaEissa target=_blank><span class=icon><i class="fa fa-github"></i>
+</span></a><a class=level-item href=https://linkedin.com/in/mostafa-abdelrahman-16356b12a target=_blank><span class=icon><i class="fa fa-linkedin-square"></i>
+</span></a><a class=level-item href=https://mostafaeissa.github.io/index.xml target=_blank><span class=icon><i class="fa fa-rss"></i></span></a></nav></div></nav></div></section><section class=section><div class=container><h1 class=title>RMSE Assumptions</h1><h2 class="subtitle is-5">August 2, 2024 by Mostafa Abdelrahman</h2><div class=tags><a class="button is-link" href=https://mostafaeissa.github.io/tags/machine-learning>Machine Learning</a></div><div class=content><p>The Root Mean Square Error (RMSE) is a common loss function used in machine learning for regression tasks that measures the average distance between the predicted and true values. However, what implicit modeling assumptions are me making when we use such error to evaluate the model fit?</p><p>Consider a dataset $(X, Y)$ containing $N$ instances and we want to train a regression model. Our goal is to make predictions for the target variable $y$ given some value of the input variable $x$. For any ML model to work there have to be some relationship between the input variable $x$ and the output variable to be able to write the output as a function of the input ($y=f(x)$). For simplicity, we assume that this relationship is linear. Hence, our function has the form $f(x) = w_0 + w_1x_i$.</p><p>Consider the dataset in the plot below, there isa general linear trend but the target variables $y$ don&rsquo;t fall perfectly on a straight line. To account for that, we update our model so that for each output we add a random noise component $\epsilon_i$. This noise component is random variable following a normal distribution with zero mean and variance $\sigma^2$.</p><p><img src=/images/rmse-assumption/rmse_assumption.png alt="RMSE Assumptions"></p><p>Our model now takes the form:</p><p>$$
+\begin{aligned}
+y_i &= f(x_i) + \epsilon_i \cr
+&= w_0 + w_1x_i + \epsilon_i \hspace{1em} \text{where}\hspace{1em} \epsilon_i \sim \mathcal{N}(0, \sigma^2)
+\end{aligned}
+$$</p><p>which consists of two components:</p><ol><li>A deterministic component $w_0 + w_1x_i$</li><li>A random component $\epsilon_i$</li></ol><p>Our goal by training the model is to find the optimal values of $w_0$ and $w_1$. Because the target variable is the sum of a deterministic component and a Gaussian random variable, it also a Gaussian random variable:</p><p>$$
+\begin{aligned}
+P(y_i|x_i, w_0, w_1,\sigma^2) &\sim w_0 + w_1x_i + \mathcal{N}(0, \sigma^2) \cr
+&\sim \mathcal{N}(\mu=w_0 + w_1x_i, \sigma^2)
+\end{aligned}
+$$</p><p>The density $P(y_i|x_i, w_0, w_1,\sigma^2)$ is the <strong>likelihood</strong> of the ith data point. Because we have $N$ data points we are interested in the joint density</p><p>$$
+P(y_1,y_2,&mldr;,y_N|x_1,x_2,&mldr;,x_N, w_0, w_1,\sigma^2)
+$$</p><p>It is reasonable to assume that the noise at each data point is independent of the noise at other points. We can then factorize the joint density into $N$ independent terms:</p><p>$$
+\begin{aligned}
+P(y_1,y_2,&mldr;,y_N|x_1,x_2,&mldr;,x_N, w_0, w_1,\sigma^2)
+\cr = \prod_{i=1}^N P(y_i,|x_i, w_0, w_1,\sigma^2) \cr
+= \mathcal{N}(\mu=w_0 + w_1x_i, \sigma^2)
+\end{aligned}
+$$</p><p>We want to find $w_0$ and $w_1$ that maximizes the likelihood. Since the log function is monotonic we will maximize the log likelihood instead</p><p>$$
+\begin{aligned}
+\log L &= \sum_{i=1}^{N}\log(\frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{1}{2\sigma^2}(y_i - w_0 - w_1x_i)^2)}\cr
+&= \sum_{i=1}^{N}{-\frac{1}{2}\log 2\pi - \log\sigma - \frac{1}{2\sigma^2}\sum_{i=1}^{N}(y_i - w_0 - w_1x_i)^2}\cr
+&= -\frac{N}{2}\log 2\pi - N\log\sigma - \frac{1}{2\sigma^2}\sum_{i=1}^{N}(y_i - w_0 - w_1x_i)^2
+\end{aligned}
+$$</p><p>To maximize $\log L$ we need to minimize the third term:</p><p>$$
+\frac{1}{2\sigma^2}\sum_{i=1}^{N}(y_i - (w_0 + w_1x_i))^2
+$$</p><p>which is exactly the Mean Square Error between the target and predicted values.</p><p>These assumptions were summarized sufficiently in the <a href=https://www.bayesrulesbook.com/>Bayes Rules! Book</a>; using the RMSE is equivalent to modeling the target variable $Y_i$ as</p><p>$$y_i \sim N(\mu_i, \sigma) \hspace{1cm} \text{with} \hspace{0.2cm} \mu_i = f(X_i)$$</p><p>with the following assumptions:</p><ol><li><p><strong>Structure of the relationship</strong>: The typical outcome $Y$ can be written as a function of $X$</p></li><li><p><strong>Structure of the variability</strong>: At any $X$ value, $Y$ varies normally around $\mu$ with consistent $\sigma$</p></li><li><p><strong>Structure of the data</strong>: Conditioned on $X$, the target variable $Y$ on case $i$ is independent of the target variable on any case $j$</p></li></ol><p>Interesting, if we have a trivial model that always predicts the mean value it will have an RMSE equals to the standard deviation of the data.</p><p>$$
+\text{RMSE}
+\begin{aligned}
+&= \sqrt{\sum_i (y_i - \bar{y})^2} \cr
+&= \sigma(Y)
+\end{aligned}
+$$</p><p>Given this observation, the mean value of the training data can be used as a baseline in regression tasks. Furthermore, we can define the quantity <strong>Fraction of the variance unexplained (FUV)</strong> that is the ratio of the MSE to the variance where it equals 1 for a trivial model and 0 for a perfect model.</p><p>$$
+\begin{aligned}
+R^2 &= 1 - \text{FUV} \cr
+&= 1 - \frac{\Sigma(y_i - \bar{y})^2}{\text{var}(y)}
+\end{aligned}
+$$</p></div></div></section><section class=section><div class="container has-text-centered"><p></p></div></section><script src=//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/highlight.min.js></script><script>hljs.initHighlightingOnLoad()</script></body>

@@ -1,238 +1,116 @@
-<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>2048 - Beyond Lambda</title>
-<meta name=renderer content="webkit"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta http-equiv=Cache-Control content="no-transform"><meta http-equiv=Cache-Control content="no-siteapp"><meta name=theme-color content="#f8f5ec"><meta name=msapplication-navbutton-color content="#f8f5ec"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec"><meta name=author content><meta name=description content="In this post we will try to implement the game 2048 as a console app in python!
-"><meta name=generator content="Hugo 0.129.0 with theme even"><link rel=canonical href=https://mostafaeissa.github.io/post/the-game-2048/><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/manifest.json><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet><link href=/lib/fancybox/jquery.fancybox-3.1.20.min.css rel=stylesheet><meta property="og:url" content="https://mostafaeissa.github.io/post/the-game-2048/"><meta property="og:site_name" content="Beyond Lambda"><meta property="og:title" content="2048"><meta property="og:description" content="In this post we will try to implement the game 2048 as a console app in python!"><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2020-05-13T00:00:00+00:00"><meta property="article:modified_time" content="2020-05-13T00:00:00+00:00"><meta itemprop=name content="2048"><meta itemprop=description content="In this post we will try to implement the game 2048 as a console app in python!"><meta itemprop=datePublished content="2020-05-13T00:00:00+00:00"><meta itemprop=dateModified content="2020-05-13T00:00:00+00:00"><meta itemprop=wordCount content="905"><meta itemprop=keywords content="Programming"><meta name=twitter:card content="summary"><meta name=twitter:title content="2048"><meta name=twitter:description content="In this post we will try to implement the game 2048 as a console app in python!"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--></head><body><div id=mobile-navbar class=mobile-navbar><div class=mobile-header-logo><a href=/ class=logo>Beyond Lambda</a></div><div class=mobile-navbar-icon><span></span>
-<span></span>
-<span></span></div></div><nav id=mobile-menu class="mobile-menu slideout-menu"><ul class=mobile-menu-list><a href=/><li class=mobile-menu-item>Home</li></a><a href=/post/><li class=mobile-menu-item>Archives</li></a><a href=/about/><li class=mobile-menu-item>About</li></a></ul></nav><div class=container id=mobile-panel><header id=header class=header><div class=logo-wrapper><a href=/ class=logo>Beyond Lambda</a></div><nav class=site-navbar><ul id=menu class=menu><li class=menu-item><a class=menu-item-link href=/>Home</a></li><li class=menu-item><a class=menu-item-link href=/post/>Archives</a></li><li class=menu-item><a class=menu-item-link href=/about/>About</a></li></ul></nav></header><main id=main class=main><div class=content-wrapper><div id=content class=content><article class=post><header class=post-header><h1 class=post-title>2048</h1><div class=post-meta><span class=post-time>2020-05-13</span><div class=post-category><a href=/categories/programming/>Programming</a></div><span class=more-meta>905 words </span><span class=more-meta>5 mins read</span></div></header><div class=post-content><p>In this post we will try to implement the game 2048 as a console app in python!</p><h3 id=introduction>Introduction</h3><p>If you are not familiar with the <a href=https://en.wikipedia.org/wiki/2048_(video_game)>game 2048</a>. It is a sliding block puzzle game where you slide numbered tiles to combine them into a tile with the number 2048. You can checkout an online version <a href=https://play2048.co/>here</a> from the original creator.</p><h3 id=game-rules>Game Rules</h3><p>In order to implement the game we need to understand its rules. The game has only a few rules:</p><ol><li><p>At every turn, a tile randomly appears on the board with a value of 2 or 4.</p></li><li><p>The player can move the tiles in one of the four direction {left, right, up, down}</p><ul><li>tiles slides as far as possible in the played direction until stopped by another tile or the board edge</li><li>when two tiles with the same number collide together, they are merged ino a new title whose value is twice the value of the individual tile</li><li>a merged tile cannot merge with another tile in the same move.</li></ul></li></ol><h3 id=game-state>Game State</h3><p>We can represent the game as a 2D array which each cell position is either empty or contains a value that is a multiple of 2.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span><span class=lnt>7
-</span><span class=lnt>8
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>create_board</span><span class=p>():</span>
-</span></span><span class=line><span class=cl>    <span class=n>board</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>array</span><span class=p>([</span>
-</span></span><span class=line><span class=cl>        <span class=p>[</span><span class=kc>None</span><span class=p>,</span><span class=kc>None</span><span class=p>,</span><span class=kc>None</span><span class=p>,</span><span class=kc>None</span><span class=p>],</span>
-</span></span><span class=line><span class=cl>        <span class=p>[</span><span class=kc>None</span><span class=p>,</span><span class=kc>None</span><span class=p>,</span><span class=kc>None</span><span class=p>,</span><span class=kc>None</span><span class=p>],</span>
-</span></span><span class=line><span class=cl>        <span class=p>[</span><span class=kc>None</span><span class=p>,</span><span class=kc>None</span><span class=p>,</span><span class=kc>None</span><span class=p>,</span><span class=kc>None</span><span class=p>],</span>
-</span></span><span class=line><span class=cl>        <span class=p>[</span><span class=kc>None</span><span class=p>,</span><span class=kc>None</span><span class=p>,</span><span class=kc>None</span><span class=p>,</span><span class=kc>None</span><span class=p>]</span>
-</span></span><span class=line><span class=cl>        <span class=p>])</span>
-</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>board</span>
-</span></span></code></pre></td></tr></table></div></div><p>We also need an additional function that will pick and empty cell and put a value of 2 or 4 into it.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>fill_random_cell</span><span class=p>(</span><span class=n>board</span><span class=p>):</span>
-</span></span><span class=line><span class=cl>    <span class=n>empty_slots</span> <span class=o>=</span> <span class=p>[(</span><span class=n>i</span><span class=p>,</span><span class=n>j</span><span class=p>)</span> <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>board</span><span class=o>.</span><span class=n>shape</span><span class=p>[</span><span class=mi>0</span><span class=p>])</span> <span class=k>for</span> <span class=n>j</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>board</span><span class=o>.</span><span class=n>shape</span><span class=p>[</span><span class=mi>1</span><span class=p>])</span> <span class=k>if</span> <span class=n>board</span><span class=p>[</span><span class=n>i</span><span class=p>,</span><span class=n>j</span><span class=p>]</span> <span class=o>==</span> <span class=kc>None</span><span class=p>]</span>
-</span></span><span class=line><span class=cl>    <span class=n>idx</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=nb>len</span><span class=p>(</span><span class=n>empty_slots</span><span class=p>))</span>
-</span></span><span class=line><span class=cl>    <span class=n>value</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>random</span><span class=o>.</span><span class=n>choice</span><span class=p>([</span><span class=mi>2</span><span class=p>,</span><span class=mi>4</span><span class=p>])</span>
-</span></span><span class=line><span class=cl>    <span class=n>board</span><span class=p>[</span><span class=n>empty_slots</span><span class=p>[</span><span class=n>idx</span><span class=p>]]</span> <span class=o>=</span> <span class=n>value</span>
-</span></span></code></pre></td></tr></table></div></div><p>As such, in order to initialize the board we simply create an empty board and fill a random position on it.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span><span class=lnt>7
-</span><span class=lnt>8
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>new_game</span><span class=p>():</span>
-</span></span><span class=line><span class=cl>    <span class=c1># create a random empty board</span>
-</span></span><span class=line><span class=cl>    <span class=n>board</span> <span class=o>=</span> <span class=n>create_board</span><span class=p>()</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>    <span class=c1># fill an empty position with 2 or 4</span>
-</span></span><span class=line><span class=cl>    <span class=n>fill_random_cell</span><span class=p>(</span><span class=n>board</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>board</span>
-</span></span></code></pre></td></tr></table></div></div><h3 id=merging-of-tiles>Merging of Tiles</h3><p>We need a couple of helper functions that can help us maage the game state.</p><p>First, we need a function to move the tiles in a certain direction by applying the rules specified below.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>shift_left</span><span class=p>(</span><span class=n>board</span><span class=p>):</span>
-</span></span><span class=line><span class=cl>    <span class=n>width</span><span class=p>,</span> <span class=n>height</span> <span class=o>=</span> <span class=n>board</span><span class=o>.</span><span class=n>shape</span>
-</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>height</span><span class=p>):</span>
-</span></span><span class=line><span class=cl>        <span class=k>for</span> <span class=n>k</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>width</span><span class=p>):</span>
-</span></span><span class=line><span class=cl>            <span class=k>for</span> <span class=n>j</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=n>width</span><span class=p>):</span>
-</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=n>board</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span> <span class=o>-</span> <span class=mi>1</span><span class=p>]</span> <span class=ow>is</span> <span class=kc>None</span><span class=p>:</span>
-</span></span><span class=line><span class=cl>                    <span class=n>board</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span> <span class=o>-</span> <span class=mi>1</span><span class=p>]</span> <span class=o>=</span> <span class=n>board</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span><span class=p>]</span>
-</span></span><span class=line><span class=cl>                    <span class=n>board</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=kc>None</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>merge_tiles</span><span class=p>(</span><span class=n>board</span><span class=p>):</span>
-</span></span><span class=line><span class=cl>    <span class=n>width</span><span class=p>,</span> <span class=n>height</span> <span class=o>=</span> <span class=n>board</span><span class=o>.</span><span class=n>shape</span>
-</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>height</span><span class=p>):</span>
-</span></span><span class=line><span class=cl>        <span class=k>for</span> <span class=n>j</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=n>width</span><span class=p>):</span>
-</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=n>board</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span> <span class=o>-</span> <span class=mi>1</span><span class=p>]</span> <span class=o>==</span> <span class=n>board</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span><span class=p>]</span> <span class=ow>and</span> <span class=n>board</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span><span class=p>]</span> <span class=ow>is</span> <span class=ow>not</span> <span class=kc>None</span><span class=p>:</span>
-</span></span><span class=line><span class=cl>                <span class=n>board</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span> <span class=o>-</span> <span class=mi>1</span><span class=p>]</span> <span class=o>*=</span> <span class=mi>2</span>
-</span></span><span class=line><span class=cl>                <span class=n>board</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=kc>None</span>
-</span></span></code></pre></td></tr></table></div></div><p>we can use the above functions to generalize board movement in all directions.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>move</span><span class=p>(</span><span class=n>board</span><span class=p>,</span> <span class=n>direction</span><span class=p>):</span>
-</span></span><span class=line><span class=cl>    <span class=n>new_board</span> <span class=o>=</span> <span class=n>board</span><span class=o>.</span><span class=n>copy</span><span class=p>()</span>
-</span></span><span class=line><span class=cl>    <span class=n>directions</span> <span class=o>=</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>        <span class=s1>&#39;left&#39;</span><span class=p>:</span> <span class=k>lambda</span> <span class=n>x</span><span class=p>:</span> <span class=n>x</span><span class=p>,</span>
-</span></span><span class=line><span class=cl>        <span class=s1>&#39;right&#39;</span><span class=p>:</span> <span class=k>lambda</span> <span class=n>board</span><span class=p>:</span> <span class=n>np</span><span class=o>.</span><span class=n>flip</span><span class=p>(</span><span class=n>board</span><span class=p>),</span>
-</span></span><span class=line><span class=cl>        <span class=s1>&#39;up&#39;</span> <span class=p>:</span> <span class=k>lambda</span> <span class=n>board</span><span class=p>:</span> <span class=n>board</span><span class=o>.</span><span class=n>T</span><span class=p>,</span>
-</span></span><span class=line><span class=cl>        <span class=s1>&#39;down&#39;</span><span class=p>:</span><span class=k>lambda</span> <span class=n>board</span><span class=p>:</span> <span class=n>np</span><span class=o>.</span><span class=n>flip</span><span class=p>(</span><span class=n>board</span><span class=p>)</span><span class=o>.</span><span class=n>T</span>
-</span></span><span class=line><span class=cl>    <span class=p>}</span>
-</span></span><span class=line><span class=cl>    <span class=n>transform</span> <span class=o>=</span> <span class=n>directions</span><span class=p>[</span><span class=n>direction</span><span class=p>]</span>
-</span></span><span class=line><span class=cl>    
-</span></span><span class=line><span class=cl>    <span class=n>new_board</span> <span class=o>=</span> <span class=n>transform</span><span class=p>(</span><span class=n>new_board</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>    <span class=n>shift_left</span><span class=p>(</span><span class=n>new_board</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>    <span class=n>merge_tiles</span><span class=p>(</span><span class=n>new_board</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>    <span class=n>shift_left</span><span class=p>(</span><span class=n>new_board</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>    <span class=n>new_board</span> <span class=o>=</span> <span class=n>transform</span><span class=p>(</span><span class=n>new_board</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>new_board</span>
-</span></span></code></pre></td></tr></table></div></div><h3 id=end-of-game>End of Game</h3><p>Second, we need a function to determine if we reached the end of a game i.e. if a player has won if a tile has the value <code>1024</code> or lost if there are no more available moves left.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>is_game_won</span><span class=p>(</span><span class=n>board</span><span class=p>):</span>
-</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>(</span><span class=n>board</span> <span class=o>==</span> <span class=mi>1024</span><span class=p>)</span><span class=o>.</span><span class=n>any</span><span class=p>()</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>is_game_lost</span><span class=p>(</span><span class=n>board</span><span class=p>):</span>
-</span></span><span class=line><span class=cl>    <span class=c1># check all move direction</span>
-</span></span><span class=line><span class=cl>    <span class=c1># if no new board can be generated</span>
-</span></span><span class=line><span class=cl>    <span class=c1># then the game is lost</span>
-</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>move</span><span class=p>(</span><span class=n>board</span><span class=p>,</span> <span class=s1>&#39;left&#39;</span><span class=p>)</span> <span class=o>==</span> <span class=n>board</span><span class=p>)</span><span class=o>.</span><span class=n>all</span><span class=p>()</span> \
-</span></span><span class=line><span class=cl>    <span class=ow>and</span> <span class=p>(</span><span class=n>move</span><span class=p>(</span><span class=n>board</span><span class=p>,</span> <span class=s1>&#39;right&#39;</span><span class=p>)</span> <span class=o>==</span> <span class=n>board</span><span class=p>)</span><span class=o>.</span><span class=n>all</span><span class=p>()</span> \
-</span></span><span class=line><span class=cl>    <span class=ow>and</span> <span class=p>(</span><span class=n>move</span><span class=p>(</span><span class=n>board</span><span class=p>,</span> <span class=s1>&#39;up&#39;</span><span class=p>)</span> <span class=o>==</span> <span class=n>board</span><span class=p>)</span><span class=o>.</span><span class=n>all</span><span class=p>()</span> \
-</span></span><span class=line><span class=cl>    <span class=ow>and</span> <span class=p>(</span><span class=n>move</span><span class=p>(</span><span class=n>board</span><span class=p>,</span> <span class=s1>&#39;down&#39;</span><span class=p>)</span> <span class=o>==</span> <span class=n>board</span><span class=p>)</span><span class=o>.</span><span class=n>all</span><span class=p>()</span> <span class=p>:</span>
-</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=kc>True</span>
-</span></span><span class=line><span class=cl>    
-</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=kc>False</span>
-</span></span></code></pre></td></tr></table></div></div><h3 id=game-loop>Game Loop</h3><p>What is left is some function to draw the board to the screen and correctly handle user input. Drawing can be done by a simple two nested for loops but we must be careful because cells can be blank or contain values up to 1024 so we need to make sure they all get maximum possible width needed.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span><span class=lnt>7
-</span><span class=lnt>8
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>draw</span><span class=p>(</span><span class=n>board</span><span class=p>):</span>
-</span></span><span class=line><span class=cl>    <span class=n>width</span><span class=p>,</span> <span class=n>height</span> <span class=o>=</span> <span class=n>board</span><span class=o>.</span><span class=n>shape</span>
-</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>height</span><span class=p>):</span>
-</span></span><span class=line><span class=cl>        <span class=k>for</span> <span class=n>j</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>width</span><span class=p>):</span>
-</span></span><span class=line><span class=cl>            <span class=n>value</span> <span class=o>=</span> <span class=s1>&#39;    &#39;</span> <span class=k>if</span> <span class=n>board</span><span class=p>[</span><span class=n>i</span><span class=p>,</span><span class=n>j</span><span class=p>]</span> <span class=ow>is</span> <span class=kc>None</span> <span class=k>else</span> <span class=nb>str</span><span class=p>(</span><span class=n>board</span><span class=p>[</span><span class=n>i</span><span class=p>,</span><span class=n>j</span><span class=p>])</span><span class=o>.</span><span class=n>center</span><span class=p>(</span><span class=mi>4</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>            <span class=nb>print</span><span class=p>(</span><span class=n>value</span><span class=p>,</span>  <span class=n>end</span><span class=o>=</span><span class=s1>&#39;|&#39;</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>()</span>
-</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=s1>&#39;----|----|----|----&#39;</span><span class=p>)</span>
-</span></span></code></pre></td></tr></table></div></div><p>We will also need to read and parse user input. To make things simply we will assume users will not enter wrong input so that we do not have to handle input validation.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>get_user_input</span><span class=p>():</span>
-</span></span><span class=line><span class=cl>    <span class=n>inp</span> <span class=o>=</span> <span class=nb>input</span><span class=p>()</span>
-</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>inp</span> <span class=o>==</span> <span class=s1>&#39;w&#39;</span><span class=p>:</span>
-</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=s1>&#39;up&#39;</span>
-</span></span><span class=line><span class=cl>    <span class=k>elif</span> <span class=n>inp</span> <span class=o>==</span> <span class=s1>&#39;s&#39;</span><span class=p>:</span>
-</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=s1>&#39;down&#39;</span>
-</span></span><span class=line><span class=cl>    <span class=k>elif</span> <span class=n>inp</span> <span class=o>==</span> <span class=s1>&#39;a&#39;</span><span class=p>:</span>
-</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=s1>&#39;left&#39;</span>
-</span></span><span class=line><span class=cl>    <span class=k>elif</span> <span class=n>inp</span> <span class=o>==</span> <span class=s1>&#39;d&#39;</span><span class=p>:</span>
-</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=s1>&#39;right&#39;</span>
-</span></span></code></pre></td></tr></table></div></div><p>At this point, we need a loop to read the user input, apply the provided movement (left, right, up, down) and check the game state for game end.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span><span class=lnt>26
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>game_loop</span><span class=p>():</span>
-</span></span><span class=line><span class=cl>    <span class=c1># create a new game </span>
-</span></span><span class=line><span class=cl>    <span class=n>board</span> <span class=o>=</span> <span class=n>new_game</span><span class=p>()</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>    <span class=k>while</span> <span class=kc>True</span><span class=p>:</span>
-</span></span><span class=line><span class=cl>        <span class=c1># draw board on screen</span>
-</span></span><span class=line><span class=cl>        <span class=n>draw</span><span class=p>(</span><span class=n>board</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>        <span class=c1># get user input </span>
-</span></span><span class=line><span class=cl>        <span class=nb>dir</span> <span class=o>=</span> <span class=n>get_user_input</span><span class=p>()</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>        <span class=c1># update game board</span>
-</span></span><span class=line><span class=cl>        <span class=n>board</span> <span class=o>=</span> <span class=n>move</span><span class=p>(</span><span class=n>board</span><span class=p>,</span> <span class=nb>dir</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>        <span class=n>fill_random_cell</span><span class=p>(</span><span class=n>board</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>        
-</span></span><span class=line><span class=cl>        <span class=c1># check game state</span>
-</span></span><span class=line><span class=cl>        <span class=n>is_won</span><span class=p>,</span> <span class=n>is_lost</span> <span class=o>=</span> <span class=n>is_game_won</span><span class=p>(</span><span class=n>board</span><span class=p>),</span> <span class=n>is_game_lost</span><span class=p>(</span><span class=n>board</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>is_won</span><span class=p>:</span>
-</span></span><span class=line><span class=cl>            <span class=nb>print</span><span class=p>(</span><span class=s1>&#39;You Won!&#39;</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>            <span class=k>break</span>
-</span></span><span class=line><span class=cl>        <span class=k>elif</span> <span class=n>is_lost</span><span class=p>:</span>
-</span></span><span class=line><span class=cl>            <span class=nb>print</span><span class=p>(</span><span class=s1>&#39;You Lost!)</span>
-</span></span><span class=line><span class=cl>            <span class=k>break</span>
-</span></span><span class=line><span class=cl>        <span class=k>else</span><span class=p>:</span>
-</span></span><span class=line><span class=cl>            <span class=k>continue</span>
-</span></span></code></pre></td></tr></table></div></div><p>and that is all :).</p></div><footer class=post-footer><nav class=post-nav><a class=prev href=/post/how-to-speak/><i class="iconfont icon-left"></i>
-<span class="prev-text nav-default">How to Speak</span>
-<span class="prev-text nav-mobile">Prev</span>
-</a><a class=next href=/post/but-i-dont-have-enough-time/><span class="next-text nav-default">Time Management and Priorities</span>
-<span class="next-text nav-mobile">Next</span>
-<i class="iconfont icon-right"></i></a></nav></footer></article></div></div></main><footer id=footer class=footer><div class=copyright>Disclaimer: The posts on this site are my own and do not represent my employer's view in any way.<div><br><div class=social-links><a href=https://github.com/MostafaEissa class="iconfont icon-github" title=github></a></div><div class=copyright><span class=power-by>Powered by <a class=hexo-link href=https://gohugo.io>Hugo</a>
-</span><span class=division>|</span>
-<span class=theme-info>Theme -
-<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a>
-</span><span class=copyright-year>&copy;
-2019 -
-2024<span class=heart><i class="iconfont icon-heart"></i></span><span>Mostafa Abdelrahman</span></span></div></footer><div class=back-to-top id=back-to-top><i class="iconfont icon-up"></i></div></div><script type=text/javascript src=/lib/jquery/jquery-3.2.1.min.js></script><script type=text/javascript src=/lib/slideout/slideout-1.0.1.min.js></script><script type=text/javascript src=/lib/fancybox/jquery.fancybox-3.1.20.min.js></script><script type=text/javascript src=/js/main.min.1821caf6efbc14cf4fb96fdb63c79a3babde5deb1fb600e97b9a2ced5678a2ed.js></script></body></html>
+<!doctype html><html lang=en-us><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta content name=keywords><meta content="Mostafa Abdelrahman" name=author><meta property="og:title" content="2048 - Beyond Lambda"><meta property="og:url" content="https://mostafaeissa.github.io/post/the-game-2048/"><meta property="og:description" content><meta property="og:type" content="website"><title>2048 | Beyond Lambda</title>
+<link rel=stylesheet href=https://mostafaeissa.github.io//css/style.css><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin=anonymous><link rel=stylesheet href=//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/default.min.css><script type=text/javascript>window.MathJax={tex:{}}</script><script async src=https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin=anonymous></script></head><body><section class=section><div class=container><nav class=nav><img src=/android-chrome-512x512.png alt=Avatar style=margin-right:1em height=100px><div class=nav-left style=flex-basis:auto><a class=nav-item href=https://mostafaeissa.github.io/><h1 class="title is-4">Beyond Lambda</h1></a><nav class="nav-item level is-mobile"><a class=level-item href=/tags>tags
+</a><a class=level-item href=https://mostafaeissa.github.io/about/>about</a></nav></div><div class=nav-right><nav class="nav-item level is-mobile"><a class=level-item href=https://github.com/MostafaEissa target=_blank><span class=icon><i class="fa fa-github"></i>
+</span></a><a class=level-item href=https://linkedin.com/in/mostafa-abdelrahman-16356b12a target=_blank><span class=icon><i class="fa fa-linkedin-square"></i>
+</span></a><a class=level-item href=https://mostafaeissa.github.io/index.xml target=_blank><span class=icon><i class="fa fa-rss"></i></span></a></nav></div></nav></div></section><section class=section><div class=container><h1 class=title>2048</h1><h2 class="subtitle is-5">May 13, 2020 by Mostafa Abdelrahman</h2><div class=tags><a class="button is-link" href=https://mostafaeissa.github.io/tags/programming>Programming</a></div><div class=content><p>In this post we will try to implement the game 2048 as a console app in python!</p><h3 id=introduction>Introduction</h3><p>If you are not familiar with the <a href=https://en.wikipedia.org/wiki/2048_(video_game)>game 2048</a>. It is a sliding block puzzle game where you slide numbered tiles to combine them into a tile with the number 2048. You can checkout an online version <a href=https://play2048.co/>here</a> from the original creator.</p><h3 id=game-rules>Game Rules</h3><p>In order to implement the game we need to understand its rules. The game has only a few rules:</p><ol><li><p>At every turn, a tile randomly appears on the board with a value of 2 or 4.</p></li><li><p>The player can move the tiles in one of the four direction {left, right, up, down}</p><ul><li>tiles slides as far as possible in the played direction until stopped by another tile or the board edge</li><li>when two tiles with the same number collide together, they are merged ino a new title whose value is twice the value of the individual tile</li><li>a merged tile cannot merge with another tile in the same move.</li></ul></li></ol><h3 id=game-state>Game State</h3><p>We can represent the game as a 2D array which each cell position is either empty or contains a value that is a multiple of 2.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>create_board</span>():
+</span></span><span style=display:flex><span>    board <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>array([
+</span></span><span style=display:flex><span>        [<span style=color:#66d9ef>None</span>,<span style=color:#66d9ef>None</span>,<span style=color:#66d9ef>None</span>,<span style=color:#66d9ef>None</span>],
+</span></span><span style=display:flex><span>        [<span style=color:#66d9ef>None</span>,<span style=color:#66d9ef>None</span>,<span style=color:#66d9ef>None</span>,<span style=color:#66d9ef>None</span>],
+</span></span><span style=display:flex><span>        [<span style=color:#66d9ef>None</span>,<span style=color:#66d9ef>None</span>,<span style=color:#66d9ef>None</span>,<span style=color:#66d9ef>None</span>],
+</span></span><span style=display:flex><span>        [<span style=color:#66d9ef>None</span>,<span style=color:#66d9ef>None</span>,<span style=color:#66d9ef>None</span>,<span style=color:#66d9ef>None</span>]
+</span></span><span style=display:flex><span>        ])
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> board
+</span></span></code></pre></div><p>We also need an additional function that will pick and empty cell and put a value of 2 or 4 into it.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>fill_random_cell</span>(board):
+</span></span><span style=display:flex><span>    empty_slots <span style=color:#f92672>=</span> [(i,j) <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> range(board<span style=color:#f92672>.</span>shape[<span style=color:#ae81ff>0</span>]) <span style=color:#66d9ef>for</span> j <span style=color:#f92672>in</span> range(board<span style=color:#f92672>.</span>shape[<span style=color:#ae81ff>1</span>]) <span style=color:#66d9ef>if</span> board[i,j] <span style=color:#f92672>==</span> <span style=color:#66d9ef>None</span>]
+</span></span><span style=display:flex><span>    idx <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>random<span style=color:#f92672>.</span>randint(len(empty_slots))
+</span></span><span style=display:flex><span>    value <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>random<span style=color:#f92672>.</span>choice([<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>4</span>])
+</span></span><span style=display:flex><span>    board[empty_slots[idx]] <span style=color:#f92672>=</span> value
+</span></span></code></pre></div><p>As such, in order to initialize the board we simply create an empty board and fill a random position on it.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>new_game</span>():
+</span></span><span style=display:flex><span>    <span style=color:#75715e># create a random empty board</span>
+</span></span><span style=display:flex><span>    board <span style=color:#f92672>=</span> create_board()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># fill an empty position with 2 or 4</span>
+</span></span><span style=display:flex><span>    fill_random_cell(board)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> board
+</span></span></code></pre></div><h3 id=merging-of-tiles>Merging of Tiles</h3><p>We need a couple of helper functions that can help us maage the game state.</p><p>First, we need a function to move the tiles in a certain direction by applying the rules specified below.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>shift_left</span>(board):
+</span></span><span style=display:flex><span>    width, height <span style=color:#f92672>=</span> board<span style=color:#f92672>.</span>shape
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> range(height):
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> k <span style=color:#f92672>in</span> range(width):
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>for</span> j <span style=color:#f92672>in</span> range(<span style=color:#ae81ff>1</span>, width):
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> board[i][j <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>] <span style=color:#f92672>is</span> <span style=color:#66d9ef>None</span>:
+</span></span><span style=display:flex><span>                    board[i][j <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>] <span style=color:#f92672>=</span> board[i][j]
+</span></span><span style=display:flex><span>                    board[i][j] <span style=color:#f92672>=</span> <span style=color:#66d9ef>None</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>merge_tiles</span>(board):
+</span></span><span style=display:flex><span>    width, height <span style=color:#f92672>=</span> board<span style=color:#f92672>.</span>shape
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> range(height):
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> j <span style=color:#f92672>in</span> range(<span style=color:#ae81ff>1</span>, width):
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>if</span> board[i][j <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>] <span style=color:#f92672>==</span> board[i][j] <span style=color:#f92672>and</span> board[i][j] <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> <span style=color:#66d9ef>None</span>:
+</span></span><span style=display:flex><span>                board[i][j <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>] <span style=color:#f92672>*=</span> <span style=color:#ae81ff>2</span>
+</span></span><span style=display:flex><span>                board[i][j] <span style=color:#f92672>=</span> <span style=color:#66d9ef>None</span>
+</span></span></code></pre></div><p>we can use the above functions to generalize board movement in all directions.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>move</span>(board, direction):
+</span></span><span style=display:flex><span>    new_board <span style=color:#f92672>=</span> board<span style=color:#f92672>.</span>copy()
+</span></span><span style=display:flex><span>    directions <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;left&#39;</span>: <span style=color:#66d9ef>lambda</span> x: x,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;right&#39;</span>: <span style=color:#66d9ef>lambda</span> board: np<span style=color:#f92672>.</span>flip(board),
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;up&#39;</span> : <span style=color:#66d9ef>lambda</span> board: board<span style=color:#f92672>.</span>T,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;down&#39;</span>:<span style=color:#66d9ef>lambda</span> board: np<span style=color:#f92672>.</span>flip(board)<span style=color:#f92672>.</span>T
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    transform <span style=color:#f92672>=</span> directions[direction]
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    new_board <span style=color:#f92672>=</span> transform(new_board)
+</span></span><span style=display:flex><span>    shift_left(new_board)
+</span></span><span style=display:flex><span>    merge_tiles(new_board)
+</span></span><span style=display:flex><span>    shift_left(new_board)
+</span></span><span style=display:flex><span>    new_board <span style=color:#f92672>=</span> transform(new_board)
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> new_board
+</span></span></code></pre></div><h3 id=end-of-game>End of Game</h3><p>Second, we need a function to determine if we reached the end of a game i.e. if a player has won if a tile has the value <code>1024</code> or lost if there are no more available moves left.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>is_game_won</span>(board):
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> (board <span style=color:#f92672>==</span> <span style=color:#ae81ff>1024</span>)<span style=color:#f92672>.</span>any()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>is_game_lost</span>(board):
+</span></span><span style=display:flex><span>    <span style=color:#75715e># check all move direction</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># if no new board can be generated</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># then the game is lost</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (move(board, <span style=color:#e6db74>&#39;left&#39;</span>) <span style=color:#f92672>==</span> board)<span style=color:#f92672>.</span>all() \
+</span></span><span style=display:flex><span>    <span style=color:#f92672>and</span> (move(board, <span style=color:#e6db74>&#39;right&#39;</span>) <span style=color:#f92672>==</span> board)<span style=color:#f92672>.</span>all() \
+</span></span><span style=display:flex><span>    <span style=color:#f92672>and</span> (move(board, <span style=color:#e6db74>&#39;up&#39;</span>) <span style=color:#f92672>==</span> board)<span style=color:#f92672>.</span>all() \
+</span></span><span style=display:flex><span>    <span style=color:#f92672>and</span> (move(board, <span style=color:#e6db74>&#39;down&#39;</span>) <span style=color:#f92672>==</span> board)<span style=color:#f92672>.</span>all() :
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>True</span>
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>False</span>
+</span></span></code></pre></div><h3 id=game-loop>Game Loop</h3><p>What is left is some function to draw the board to the screen and correctly handle user input. Drawing can be done by a simple two nested for loops but we must be careful because cells can be blank or contain values up to 1024 so we need to make sure they all get maximum possible width needed.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>draw</span>(board):
+</span></span><span style=display:flex><span>    width, height <span style=color:#f92672>=</span> board<span style=color:#f92672>.</span>shape
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> range(height):
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> j <span style=color:#f92672>in</span> range(width):
+</span></span><span style=display:flex><span>            value <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;    &#39;</span> <span style=color:#66d9ef>if</span> board[i,j] <span style=color:#f92672>is</span> <span style=color:#66d9ef>None</span> <span style=color:#66d9ef>else</span> str(board[i,j])<span style=color:#f92672>.</span>center(<span style=color:#ae81ff>4</span>)
+</span></span><span style=display:flex><span>            print(value,  end<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;|&#39;</span>)
+</span></span><span style=display:flex><span>        print()
+</span></span><span style=display:flex><span>        print(<span style=color:#e6db74>&#39;----|----|----|----&#39;</span>)
+</span></span></code></pre></div><p>We will also need to read and parse user input. To make things simply we will assume users will not enter wrong input so that we do not have to handle input validation.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_user_input</span>():
+</span></span><span style=display:flex><span>    inp <span style=color:#f92672>=</span> input()
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> inp <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;w&#39;</span>:
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#39;up&#39;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>elif</span> inp <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;s&#39;</span>:
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#39;down&#39;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>elif</span> inp <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;a&#39;</span>:
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#39;left&#39;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>elif</span> inp <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;d&#39;</span>:
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#39;right&#39;</span>
+</span></span></code></pre></div><p>At this point, we need a loop to read the user input, apply the provided movement (left, right, up, down) and check the game state for game end.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>game_loop</span>():
+</span></span><span style=display:flex><span>    <span style=color:#75715e># create a new game </span>
+</span></span><span style=display:flex><span>    board <span style=color:#f92672>=</span> new_game()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>while</span> <span style=color:#66d9ef>True</span>:
+</span></span><span style=display:flex><span>        <span style=color:#75715e># draw board on screen</span>
+</span></span><span style=display:flex><span>        draw(board)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># get user input </span>
+</span></span><span style=display:flex><span>        dir <span style=color:#f92672>=</span> get_user_input()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># update game board</span>
+</span></span><span style=display:flex><span>        board <span style=color:#f92672>=</span> move(board, dir)
+</span></span><span style=display:flex><span>        fill_random_cell(board)
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#75715e># check game state</span>
+</span></span><span style=display:flex><span>        is_won, is_lost <span style=color:#f92672>=</span> is_game_won(board), is_game_lost(board)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> is_won:
+</span></span><span style=display:flex><span>            print(<span style=color:#e6db74>&#39;You Won!&#39;</span>)
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>break</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>elif</span> is_lost:
+</span></span><span style=display:flex><span>            print(<span style=color:#e6db74>&#39;You Lost!)</span>
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>break</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>else</span>:
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>continue</span>
+</span></span></code></pre></div><p>and that is all :).</p></div></div></section><section class=section><div class="container has-text-centered"><p></p></div></section><script src=//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/highlight.min.js></script><script>hljs.initHighlightingOnLoad()</script></body>
