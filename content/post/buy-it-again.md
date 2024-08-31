@@ -1,5 +1,5 @@
 ---
-title: "Buy It Again"
+title: "Buy It Again Recommendation"
 date: 2024-08-31
 tags: [Machine Learning]
 mathjax: true
